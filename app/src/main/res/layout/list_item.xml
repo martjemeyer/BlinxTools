@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="6dp"
+    android:backgroundTint="#1c1c1c">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/pair"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textAlignment="center"
+            style="@style/Pair"
+            tools:text="GTPLUS/BTC"/>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/descriptionBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="lastPrice,highPrice,lowPrice" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/descriptionDetailBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="lastPriceDetailsBtc,highPriceDetailsBtc,lowPriceDetailsBtc" />
+
+        <!-- Last price -->
+        <TextView
+            android:id="@+id/lastPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/pair"
+            style="@style/ValuesInfo"
+            android:text="Last price" />
+
+        <TextView
+            android:id="@+id/lastPriceDetailsBtc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@+id/lastPrice"
+            app:layout_constraintStart_toEndOf="@+id/descriptionBarrier"
+            style="@style/ValuesDetailsBtc"
+            tools:text="0.00001623 BTC" />
+
+        <TextView
+            android:id="@+id/lastPriceDetailsCurrency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@+id/lastPrice"
+            app:layout_constraintStart_toEndOf="@+id/descriptionDetailBarrier"
+            style="@style/ValuesDetailsCurrency"
+            tools:text="€0.16" />
+
+        <!-- 24 High price -->
+        <TextView
+            android:id="@+id/highPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/lastPrice"
+            style="@style/ValuesInfo"
+            android:text="24h High" />
+
+        <TextView
+            android:id="@+id/highPriceDetailsBtc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@+id/highPrice"
+            app:layout_constraintStart_toEndOf="@+id/descriptionBarrier"
+            style="@style/ValuesDetailsBtc"
+            tools:text="0.00002023 BTC" />
+
+        <TextView
+            android:id="@+id/highPriceDetailsCurrency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@+id/highPrice"
+            app:layout_constraintStart_toEndOf="@+id/descriptionDetailBarrier"
+            style="@style/ValuesDetailsCurrency"
+            tools:text="€0.20" />
+
+        <!-- 24 Low price -->
+        <TextView
+            android:id="@+id/lowPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/highPrice"
+            style="@style/ValuesInfo"
+            android:text="24h Low" />
+
+        <TextView
+            android:id="@+id/lowPriceDetailsBtc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@+id/lowPrice"
+            app:layout_constraintStart_toEndOf="@+id/descriptionBarrier"
+            style="@style/ValuesDetailsBtc"
+            tools:text="0.00001212 BTC" />
+
+        <TextView
+            android:id="@+id/lowPriceDetailsCurrency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@+id/lowPrice"
+            app:layout_constraintStart_toEndOf="@+id/descriptionDetailBarrier"
+            style="@style/ValuesDetailsCurrency"
+            tools:text="€0.12" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

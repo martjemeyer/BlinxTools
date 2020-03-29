@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="pairTextColor">#FFF</color>
+    <color name="detailCurrencyTextColor">#FFF</color>
+    <color name="detailsBtcTextColor">#FFF</color>
+    <color name="infoTextColor">#C1C1C1</color>
+
+    <!-- Basic colors -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue_light">#FF29ABE2</color>
+    <color name="blue">#FF0071BC</color>
+    <color name="blue_dark">#FF2E3192</color>
+    <color name="green_light">#FF39B54A</color>
+    <color name="green">#FF009245</color>
+    <color name="yellow_light">#FFfcee21</color>
+    <color name="yellow">#FFFFDE17</color>
+    <color name="yellow_dark">#FFCCAE00</color>
+    <color name="orange_light">#FFFAAF41</color>
+    <color name="orange">#FFF7941E</color>
+    <color name="orange_dark">#FFF15A29</color>
+    <color name="red">#FFFF0000</color>
+    <color name="black">#FF000000</color>
+    <color name="gray">#FF6A6A6A</color>
+
+    <!-- Grey scale -->
+    <color name="grey_95">#FFF0F0F0</color>
+    <color name="grey_90">#FFE5E5E5</color>
+    <color name="grey_85">#FFD9D9D9</color>
+    <color name="grey_80">#FFCCCCCC</color>
+    <color name="grey_70">#FFB3B3B3</color>
+    <color name="grey_60">#FF999999</color>
+    <color name="grey_50">#FF7f7f7f</color>
+    <color name="grey_40">#FF666666</color>
+    <color name="grey_35">#FF595959</color>
+    <color name="grey_30">#FF4D4D4D</color>
+    <color name="grey_25">#FF404040</color>
+    <color name="grey_20">#FF333333</color>
+    <color name="grey_15">#FF262626</color>
+    <color name="grey_10">#FF191919</color>
+    <color name="grey_05">#FF0D0D0D</color>
+    <color name="background">#121212</color>
+
+</resources>
