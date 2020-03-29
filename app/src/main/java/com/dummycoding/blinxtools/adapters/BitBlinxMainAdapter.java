@@ -51,7 +51,7 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
 
         private TextView pair;
         private TextView lastPriceDetailsBtc, highPriceDetailsBtc, lowPriceDetailsBtc;
-        private TextView lastPriceDetailsCurrency, highPriceDetailsCurrency, lowPriceDetailsCurrency;
+        private TextView lastPriceDetailsCurrency;
 
         MainHolder(View itemView) {
             super(itemView);
@@ -61,8 +61,6 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
             highPriceDetailsBtc = itemView.findViewById(R.id.highPriceDetailsBtc);
             lowPriceDetailsBtc = itemView.findViewById(R.id.lowPriceDetailsBtc);
             lastPriceDetailsCurrency = itemView.findViewById(R.id.lastPriceDetailsCurrency);
-            highPriceDetailsCurrency= itemView.findViewById(R.id.highPriceDetailsCurrency);
-            lowPriceDetailsCurrency = itemView.findViewById(R.id.lowPriceDetailsCurrency);
         }
 
         void setDetails(Result result) {
@@ -70,9 +68,7 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
             lastPriceDetailsBtc.setText(result.last + " BTC");
             highPriceDetailsBtc.setText(result.high + " BTC");
             lowPriceDetailsBtc.setText(result.low + " BTC");
-            lastPriceDetailsCurrency.setText("€ " + Float.parseFloat(result.last) * 1000);
-            highPriceDetailsCurrency.setText("€ " + result.high);
-            lowPriceDetailsCurrency.setText("€ " + result.low);
+            lastPriceDetailsCurrency.setText(Float.parseFloat(result.last) * 1000 + " EUR");
         }
     }
 }

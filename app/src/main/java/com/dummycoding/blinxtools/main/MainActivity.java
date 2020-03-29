@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.dummycoding.blinxtools.BaseActivity;
+import com.dummycoding.blinxtools.databinding.ActivityMainBinding;
 import com.dummycoding.blinxtools.usecases.FetchActiveCurrenciesUseCase;
 import com.dummycoding.blinxtools.usecases.FetchPricesUseCase;
 
@@ -23,13 +24,11 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mViewMvc = new MainViewMvcImpl(LayoutInflater.from(this), null, this, this);
+        mViewMvc = new MainViewMvcImpl(LayoutInflater.from(this), null, this);
         setContentView(mViewMvc.getRootView());
 
         mFetchActiveCurrenciesUseCase = getCompositionRoot().getFetchActiveCurrenciesUseCase();
         mFetchPricesUseCase = getCompositionRoot().getFetchPricesUseCase();
-
         buttonPressed();
     }
 
