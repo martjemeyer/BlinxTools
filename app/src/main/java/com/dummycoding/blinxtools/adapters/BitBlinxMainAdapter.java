@@ -1,16 +1,22 @@
 package com.dummycoding.blinxtools.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dummycoding.blinxtools.R;
 import com.dummycoding.blinxtools.pojos.bitblinx.Result;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -49,6 +55,9 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
 
     class MainHolder extends RecyclerView.ViewHolder {
 
+        private MaterialCardView cardView;
+        private ImageView gainIcon;
+        private TextView gainText;
         private TextView pair;
         private TextView lastPriceDetailsBtc, highPriceDetailsBtc, lowPriceDetailsBtc;
         private TextView lastPriceDetailsCurrency;
@@ -56,6 +65,9 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
         MainHolder(View itemView) {
             super(itemView);
 
+            cardView = itemView.findViewById(R.id.card);
+            gainIcon = itemView.findViewById(R.id.gainIcon);
+            gainText = itemView.findViewById(R.id.gain);
             pair = itemView.findViewById((R.id.pair));
             lastPriceDetailsBtc = itemView.findViewById(R.id.lastPriceDetailsBtc);
             highPriceDetailsBtc = itemView.findViewById(R.id.highPriceDetailsBtc);
@@ -65,6 +77,15 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
 
         void setDetails(Result result) {
             pair.setText(result.symbol);
+
+            boolean negativeChange = result.priceChange.contains("-");
+            int gainColor = ContextCompat.getColor(context, negativeChange ? R.color.red : R.color.green);
+            cardView.setStrokeColor(gainColor);
+            gainIcon.setImageResource(negativeChange ? R.drawable.menu_down : R.drawable.menu_up);
+            ImageViewCompat.setImageTintList(gainIcon, ColorStateList.valueOf(gainColor));
+            gainText.setText(result.priceChange + "%");
+            gainText.setTextColor(gainColor);
+
             lastPriceDetailsBtc.setText(result.last + " BTC");
             highPriceDetailsBtc.setText(result.high + " BTC");
             lowPriceDetailsBtc.setText(result.low + " BTC");

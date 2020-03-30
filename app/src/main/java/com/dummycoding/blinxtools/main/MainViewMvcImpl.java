@@ -33,7 +33,7 @@ public class MainViewMvcImpl extends BaseViewMvc<MainViewMvc.Listener> implement
 
         mListener = listener;
 
-        view.refreshButton.setOnClickListener(c -> refreshButtonPressed());
+        view.refreshFab.setOnClickListener(c -> refreshButtonPressed());
 
         mAdapter = new BitBlinxMainAdapter(context, new ArrayList<>());
         view.recyclerView.setLayoutManager(new LinearLayoutManager(context));

@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewMvc = new MainViewMvcImpl(LayoutInflater.from(this), null, this);
+        mViewMvc = new MainViewMvcImpl(LayoutInflater.from(this), this, this);
         setContentView(mViewMvc.getRootView());
 
         mFetchActiveCurrenciesUseCase = getCompositionRoot().getFetchActiveCurrenciesUseCase();
