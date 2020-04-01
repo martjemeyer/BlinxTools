@@ -35,4 +35,8 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="HeaderBar">
+        <item name="android:background">@color/background</item>
+    </style>
+
 </resources>

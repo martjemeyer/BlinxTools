@@ -19,5 +19,4 @@ public interface ViewMvc {
      * @return root Android View of this MVC View
      */
     View getRootView();
-
 }

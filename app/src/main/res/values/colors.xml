@@ -9,6 +9,8 @@
     <color name="detailsBtcTextColor">#FFF</color>
     <color name="infoTextColor">#C1C1C1</color>
 
+    <color name="background">#121212</color>
+
     <!-- Basic colors -->
     <color name="white">#FFFFFFFF</color>
     <color name="blue_light">#FF29ABE2</color>
@@ -42,6 +44,6 @@
     <color name="grey_15">#FF262626</color>
     <color name="grey_10">#FF191919</color>
     <color name="grey_05">#FF0D0D0D</color>
-    <color name="background">#121212</color>
+
 
 </resources>

@@ -1,13 +1,20 @@
 package com.dummycoding.blinxtools.main;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.dummycoding.blinxtools.BaseActivity;
+import com.dummycoding.blinxtools.R;
 import com.dummycoding.blinxtools.databinding.ActivityMainBinding;
+import com.dummycoding.blinxtools.preferences.SettingsActivity;
 import com.dummycoding.blinxtools.usecases.FetchActiveCurrenciesUseCase;
 import com.dummycoding.blinxtools.usecases.FetchPricesUseCase;
 
@@ -27,9 +34,27 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener {
         mViewMvc = new MainViewMvcImpl(LayoutInflater.from(this), this, this);
         setContentView(mViewMvc.getRootView());
 
+        setSupportActionBar(mViewMvc.getToolbar());
+
         mFetchActiveCurrenciesUseCase = getCompositionRoot().getFetchActiveCurrenciesUseCase();
         mFetchPricesUseCase = getCompositionRoot().getFetchPricesUseCase();
-        buttonPressed();
+        openSettings();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.settings) {
+            openSettings();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -52,9 +77,15 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener {
         super.onDestroy();
     }
 
+    void openSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
     @SuppressLint("CheckResult")
     @Override
     public void buttonPressed() {
+
         mViewMvc.showProgressBar(true);
         mFetchActiveCurrenciesUseCase.getActiveCurrencies()
                 .subscribeOn(Schedulers.io())
