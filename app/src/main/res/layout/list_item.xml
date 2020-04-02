@@ -10,7 +10,7 @@
     app:cardElevation="6dp"
     android:backgroundTint="#1c1c1c"
     app:strokeColor="@color/green"
-    app:strokeWidth="2dp" >
+    app:strokeWidth="1dp" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/lastPriceCurrency"
             style="@style/ValuesInfo"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:text="Last price" />
 
         <TextView
@@ -101,7 +101,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:layout_constraintTop_toTopOf="@+id/lastPriceBtc"
+            app:layout_constraintTop_toBottomOf="@+id/lastPriceDetailsCurrency"
             app:layout_constraintStart_toEndOf="@+id/descriptionBarrier"
             style="@style/ValuesDetailsCurrency"
             tools:text="0.00001623" />
@@ -112,7 +112,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            app:layout_constraintTop_toBottomOf="@+id/lastPriceBtc"
+            app:layout_constraintTop_toBottomOf="@+id/lastPriceDetailsBtc"
             style="@style/ValuesInfo"
             android:visibility="gone"
             tools:visibility="visible"

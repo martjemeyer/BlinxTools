@@ -1,42 +1,18 @@
 package com.dummycoding.blinxtools.pojos.coindesk;
-
-import com.dummycoding.blinxtools.pojos.coindesk.fiat.EUR;
-import com.dummycoding.blinxtools.pojos.coindesk.fiat.GBP;
-import com.dummycoding.blinxtools.pojos.coindesk.fiat.USD;
 import com.squareup.moshi.Json;
 
+import java.util.Map;
 
 public class Bpi {
 
-    @Json(name = "USD")
-    private USD uSD;
-    @Json(name = "GBP")
-    private GBP gBP;
-    @Json(name = "EUR")
-    private EUR eUR;
+    @Json(name = "bpi")
+    public Map<String, BpiCurrency> bpiCurrencies;
 
-    public USD getUSD() {
-        return uSD;
+    public Map<String, BpiCurrency> getBpiCurrencies() {
+        return bpiCurrencies;
     }
 
-    public void setUSD(USD uSD) {
-        this.uSD = uSD;
+    public void setBpiCurrencies(Map<String, BpiCurrency> bpiCurrencies) {
+        this.bpiCurrencies = bpiCurrencies;
     }
-
-    public GBP getGBP() {
-        return gBP;
-    }
-
-    public void setGBP(GBP gBP) {
-        this.gBP = gBP;
-    }
-
-    public EUR getEUR() {
-        return eUR;
-    }
-
-    public void setEUR(EUR eUR) {
-        this.eUR = eUR;
-    }
-
 }

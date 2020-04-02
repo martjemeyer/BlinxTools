@@ -6,6 +6,7 @@ import android.view.View;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.dummycoding.blinxtools.R;
 import com.dummycoding.blinxtools.adapters.BitBlinxMainAdapter;
 import com.dummycoding.blinxtools.common.mvcviews.BaseViewMvc;
 import com.dummycoding.blinxtools.databinding.ActivityMainBinding;
@@ -46,8 +47,9 @@ public class MainViewMvcImpl extends BaseViewMvc<MainViewMvc.Listener> implement
     }
 
     @Override
-    public void updateCurrentValueBtc(String value) {
-        view.currentValueBtcDetailTv.setText(value);
+    public void updateCurrentValueBtc(String value, String currency) {
+        view.currentValueBtcDetailTv.setVisibility(View.VISIBLE);
+        view.currentValueBtcDetailTv.setText(String.format(getString(R.string.current_btc_price), value, currency));
     }
 
     @Override

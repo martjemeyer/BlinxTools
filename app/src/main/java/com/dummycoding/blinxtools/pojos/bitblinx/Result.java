@@ -27,5 +27,4 @@ public class Result {
     public String timestamp;
     @Json(name = "symbol")
     public String symbol;
-
 }

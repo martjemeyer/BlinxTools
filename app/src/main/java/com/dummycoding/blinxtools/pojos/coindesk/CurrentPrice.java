@@ -2,6 +2,8 @@ package com.dummycoding.blinxtools.pojos.coindesk;
 
 import com.squareup.moshi.Json;
 
+import java.util.Map;
+
 public class CurrentPrice {
     @Json(name = "time")
     private Time time;
@@ -10,7 +12,7 @@ public class CurrentPrice {
     @Json(name = "chartName")
     private String chartName;
     @Json(name = "bpi")
-    private Bpi bpi;
+    private Map<String, BpiCurrency> bpiCurrencies;
 
     public Time getTime() {
         return time;
@@ -36,12 +38,11 @@ public class CurrentPrice {
         this.chartName = chartName;
     }
 
-    public Bpi getBpi() {
-        return bpi;
+    public Map<String, BpiCurrency> getBpiCurrencies() {
+        return bpiCurrencies;
     }
 
-    public void setBpi(Bpi bpi) {
-        this.bpi = bpi;
+    public void setBpiCurrencies(Map<String, BpiCurrency> bpiCurrencies) {
+        this.bpiCurrencies = bpiCurrencies;
     }
-
 }

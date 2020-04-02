@@ -57,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
             CharSequence[] entries = { "BTC", "GTPLUS", "GTFTA" };
             CharSequence[] entryValues = { "btc", "gtplus", "gtfta" };
 
-            mListPreference = getPreferenceManager().findPreference("token_list");
+            mListPreference = getPreferenceManager().findPreference(getString(R.string.token_list_key));
             mListPreference.setEntries(entries);
             mListPreference.setEntryValues(entryValues);
 

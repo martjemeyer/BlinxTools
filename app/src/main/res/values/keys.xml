@@ -1,0 +1,11 @@
+<resources>
+    <string name="owned_currency_key">owned_currency_key</string>
+    <string name="amount_owned_tokens_key">amount_owned_tokens_key</string>
+    <string name="token_list_key">token_list_key</string>
+    <string name="high_low_key_24h">high_low_key_24h</string>
+    <string name="current_btc_price_key">current_btc_price_key</string>
+    <string name="preferred_currency_key">preferred_currency_key</string>
+    <string name="btc_value_for_preferred_currency_key">btc_value_for_preferred_currency_key</string>
+    <string name="show_minimum_to_fund_account_key">show_minimum_to_fund_account_key</string>
+
+</resources>

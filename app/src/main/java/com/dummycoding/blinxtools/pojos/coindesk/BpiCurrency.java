@@ -1,18 +1,16 @@
-package com.dummycoding.blinxtools.pojos.coindesk.fiat;
+package com.dummycoding.blinxtools.pojos.coindesk;
 
 import com.squareup.moshi.Json;
 
-public class EUR {
+public class BpiCurrency {
     @Json(name = "code")
     private String code;
-    @Json(name = "symbol")
-    private String symbol;
     @Json(name = "rate")
     private String rate;
     @Json(name = "description")
     private String description;
     @Json(name = "rate_float")
-    private Double rateFloat;
+    private Float rateFloat;
 
     public String getCode() {
         return code;
@@ -20,14 +18,6 @@ public class EUR {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
     }
 
     public String getRate() {
@@ -46,11 +36,11 @@ public class EUR {
         this.description = description;
     }
 
-    public Double getRateFloat() {
+    public Float getRateFloat() {
         return rateFloat;
     }
 
-    public void setRateFloat(Double rateFloat) {
+    public void setRateFloat(Float rateFloat) {
         this.rateFloat = rateFloat;
     }
 }

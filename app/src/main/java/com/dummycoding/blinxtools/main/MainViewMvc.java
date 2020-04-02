@@ -16,7 +16,7 @@ public interface MainViewMvc extends ObservableViewMvc<MainViewMvc.Listener> {
     void updateAdapter(List<Result> results);
     void refreshButtonPressed();
     void showProgressBar(boolean show);
-    void updateCurrentValueBtc(String value);
+    void updateCurrentValueBtc(String value, String currency);
     void updateCurrentValueOwnedToken(String value);
     Toolbar getToolbar();
 }

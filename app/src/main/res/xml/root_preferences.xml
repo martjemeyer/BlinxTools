@@ -3,41 +3,43 @@
     <PreferenceCategory app:title="BTC">
 
         <EditTextPreference
-            app:key="preferred_currency"
+            app:key="@string/preferred_currency_key"
             app:title="Select your preferred currency"
+            app:defaultValue="EUR"
             app:useSimpleSummaryProvider="true" />
 
         <SwitchPreferenceCompat
-            app:key="current_btc_price"
-            app:title="Show current BTC price"
-            app:defaultValue="true" />
+            app:key="@string/show_minimum_to_fund_account_key"
+            app:title="Show minimum amount of chosen currency to fund an account"
+            app:defaultValue="false"
+            app:summary="Note that this is the absolute minimum! Always transfer a bit more because of the continues market changes."/>
 
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Owned token">
 
         <SwitchPreferenceCompat
-            app:key="owned_currency"
+            app:key="@string/owned_currency_key"
             app:title="Show owned token in app"
             app:defaultValue="false"
             app:summary="Shows the current total value of [amount] [token] in your chosen currency" />
 
         <EditTextPreference
-            app:key="amount_owned_tokens"
+            app:key="@string/amount_owned_tokens_key"
             app:title="Set amount"
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            app:key="token_list"
+            app:key="@string/token_list_key"
             app:title="Select token"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Pairs list">
+    <PreferenceCategory app:title="Market list">
 
         <SwitchPreferenceCompat
-            app:key="24h_high_low"
+            app:key="@string/high_low_key_24h"
             app:title="Show 24 high/low"
             app:defaultValue="false" />
 

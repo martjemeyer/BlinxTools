@@ -1,8 +1,16 @@
 package com.dummycoding.blinxtools.di;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.dummycoding.blinxtools.BlinxTools;
+import com.dummycoding.blinxtools.R;
 import com.dummycoding.blinxtools.data.network.BitBlinxApi;
 import com.dummycoding.blinxtools.data.network.CoinDeskApi;
+import com.dummycoding.blinxtools.data.network.Repository;
+import com.dummycoding.blinxtools.data.network.RepositoryImpl;
 import com.dummycoding.blinxtools.usecases.FetchActiveCurrenciesUseCase;
+import com.dummycoding.blinxtools.usecases.FetchAvailableCurrenciesUseCase;
 import com.dummycoding.blinxtools.usecases.FetchPricesUseCase;
 
 import retrofit2.Retrofit;
@@ -13,10 +21,18 @@ public class CompositionRoot {
     private final String BITBLINX_BASE_URL = "https://trade.bitblinx.com/";
     private final String COINDESK_BASE_URL = "https://api.coindesk.com/v1/";
 
+    private final Context mContext;
     private Retrofit mBitBlinxRetrofit = null;
     private Retrofit mCoinDeskRetrofit = null;
     private BitBlinxApi mBitBlinxApi;
     private CoinDeskApi mCoinDeskApi;
+    private SharedPreferences mSharedPreferences;
+    private Repository mRepository;
+
+    public CompositionRoot(Context context) {
+        mContext = context;
+        mSharedPreferences = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_PRIVATE);
+    }
 
     private Retrofit getBitBlinxRetrofit() {
         if (mBitBlinxRetrofit == null) {
@@ -54,8 +70,27 @@ public class CompositionRoot {
         return mCoinDeskApi;
     }
 
+    private Context getApplicationContext() {
+        return mContext;
+    }
+
+    private SharedPreferences getSharedPreferences() {
+        return mSharedPreferences;
+    }
+
+    public Repository getRepository() {
+        if (mRepository == null) {
+            mRepository = new RepositoryImpl(getApplicationContext(), getSharedPreferences());
+        }
+        return mRepository;
+    }
+
     public FetchPricesUseCase getFetchPricesUseCase() {
         return new FetchPricesUseCase(getCoinDeskApi());
+    }
+
+    public FetchAvailableCurrenciesUseCase getFetchAvailableCurrenciesUseCase() {
+        return new FetchAvailableCurrenciesUseCase(getCoinDeskApi());
     }
 
     public FetchActiveCurrenciesUseCase getFetchActiveCurrenciesUseCase() {

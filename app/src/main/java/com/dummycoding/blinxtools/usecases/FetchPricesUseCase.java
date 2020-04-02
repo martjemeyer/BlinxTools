@@ -13,7 +13,7 @@ public class FetchPricesUseCase {
         mCoinDeskApi = coinDeskApi;
     }
 
-    public Single<CurrentPrice> getCurrentPrice() {
-        return mCoinDeskApi.getCurrentPrice();
+    public Single<CurrentPrice> getCurrentPrice(String currency) {
+        return mCoinDeskApi.getCurrentPriceFiat(currency);
     }
 }
