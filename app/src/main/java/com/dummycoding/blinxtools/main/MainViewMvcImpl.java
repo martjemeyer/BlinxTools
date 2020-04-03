@@ -27,8 +27,6 @@ public class MainViewMvcImpl extends BaseViewMvc<MainViewMvc.Listener> implement
         view = ActivityMainBinding.inflate(inflater);
         setRootView(view.getRoot());
 
-        view.refreshFab.setOnClickListener(c -> refreshButtonPressed());
-
         mAdapter = new BitBlinxMainAdapter(context, new ArrayList<>());
         view.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         view.recyclerView.setAdapter(mAdapter);
@@ -54,7 +52,8 @@ public class MainViewMvcImpl extends BaseViewMvc<MainViewMvc.Listener> implement
 
     @Override
     public void updateCurrentValueOwnedToken(String value) {
-
+        view.minimumFundAccountTv.setText(String.format(getString(R.string.min_gtplus_for_funding), value, "EUR\n" +
+                "5000 GTFTA = 3507.0365 EUR"));
     }
 
     @Override

@@ -10,9 +10,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dummycoding.blinxtools.BaseActivity;
 import com.dummycoding.blinxtools.R;
+import com.dummycoding.blinxtools.pojos.bitblinx.Result;
 import com.dummycoding.blinxtools.pojos.coindesk.BpiCurrency;
 import com.dummycoding.blinxtools.pojos.coindesk.Currency;
 import com.dummycoding.blinxtools.pojos.coindesk.CurrentPrice;
@@ -28,13 +30,14 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity implements MainViewMvc.Listener {
+public class MainActivity extends BaseActivity implements MainViewMvc.Listener, SwipeRefreshLayout.OnRefreshListener {
 
     private MainViewMvc mViewMvc;
     private CompositeDisposable subscriptions = new CompositeDisposable();
     private FetchActiveCurrenciesUseCase mFetchActiveCurrenciesUseCase;
     private FetchPricesUseCase mFetchPricesUseCase;
     private FetchAvailableCurrenciesUseCase mFetchAvailableCurrenciesUseCase;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @SuppressLint("CheckResult")
     @Override
@@ -49,7 +52,23 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener {
         mFetchPricesUseCase = getCompositionRoot().getFetchPricesUseCase();
         mFetchAvailableCurrenciesUseCase = getCompositionRoot().getFetchAvailableCurrenciesUseCase();
 
-        buttonPressed();
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = findViewById(R.id.swipeContainer);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary);
+
+        /**
+         * Showing Swipe Refresh animation on activity create
+         * As animation won't start on onCreate, post runnable is used
+         */
+        mSwipeRefreshLayout.post(new Runnable() {
+
+            @Override
+            public void run() {
+
+                onRefresh();
+            }
+        });
     }
 
     @Override
@@ -93,45 +112,6 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener {
         startActivity(intent);
     }
 
-    @SuppressLint("CheckResult")
-    @Override
-    public void buttonPressed() {
-
-        getActiveCurrencies();
-
-       /* mFetchAvailableCurrenciesUseCase.getCurrencies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-
-                    for (Currency cur : result) {
-                        Timber.d(cur.getCurrency() + " " + cur.getCountry());
-                    }
-                    mViewMvc.showProgressBar(false);
-                }, throwable -> {
-                    Toast.makeText(this, "Error getting bitblinx data", Toast.LENGTH_LONG).show();
-                    Timber.e(throwable, "buttonPressed: ");
-                    mViewMvc.showProgressBar(false);
-                });*/
-
-        mViewMvc.showProgressBar(true);
-
-        mFetchActiveCurrenciesUseCase.getActiveCurrencies()
-                .subscribeOn(Schedulers.io())
-                .map(activeCurrencies -> activeCurrencies.getResult())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(results -> {
-                    mViewMvc.updateAdapter(results);
-                    mViewMvc.showProgressBar(false);
-                }, throwable -> {
-                    Toast.makeText(this, "Error getting BitBlinx data", Toast.LENGTH_LONG).show();
-                    Timber.e(throwable, "buttonPressed: ");
-                    mViewMvc.showProgressBar(false);
-                });
-
-
-    }
-
     private void getActiveCurrencies() {
         String preferredCurrency = getCompositionRoot().getRepository().getPreferredCurrency();
         mFetchPricesUseCase.getCurrentPrice(preferredCurrency)
@@ -149,5 +129,50 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener {
                             Timber.e(throwable, "buttonPressed: ");
                             mViewMvc.showProgressBar(false);
                 });
+    }
+
+    @Override
+    public void onRefresh() {
+        getActiveCurrencies();
+
+        mSwipeRefreshLayout.setRefreshing(true);
+
+       /* mFetchAvailableCurrenciesUseCase.getCurrencies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+
+                    for (Currency cur : result) {
+                        Timber.d(cur.getCurrency() + " " + cur.getCountry());
+                    }
+                    mViewMvc.showProgressBar(false);
+                }, throwable -> {
+                    Toast.makeText(this, "Error getting bitblinx data", Toast.LENGTH_LONG).show();
+                    Timber.e(throwable, "buttonPressed: ");
+                    mViewMvc.showProgressBar(false);
+                });*/
+
+        mFetchActiveCurrenciesUseCase.getActiveCurrencies()
+                .subscribeOn(Schedulers.io())
+                .map(activeCurrencies -> activeCurrencies.getResult())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(results -> {
+                    Result firstResult = results.get(0);
+                    if (firstResult.symbol.contains("GTPLUS/BTC")) {
+                        float preferredCurrency = getCompositionRoot().getRepository().getBtcValueForPreferredCurrency();
+                        mViewMvc.updateCurrentValueOwnedToken(Float.parseFloat(firstResult.last) * preferredCurrency * 500 + "");
+                    }
+                    mViewMvc.updateAdapter(results);
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }, throwable -> {
+                    Toast.makeText(this, "Error getting BitBlinx data", Toast.LENGTH_LONG).show();
+                    Timber.e(throwable, "buttonPressed: ");
+                    mSwipeRefreshLayout.setRefreshing(false);
+                });
+    }
+
+    @Override
+    public void buttonPressed() {
+
     }
 }
