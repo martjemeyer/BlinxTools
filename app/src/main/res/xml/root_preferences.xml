@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="BTC">
+    <PreferenceCategory app:title="General">
 
         <EditTextPreference
             app:key="@string/preferred_currency_key"
@@ -9,30 +9,11 @@
             app:useSimpleSummaryProvider="true" />
 
         <SwitchPreferenceCompat
-            app:key="@string/show_minimum_to_fund_account_key"
-            app:title="Show minimum amount of chosen currency to fund an account"
-            app:defaultValue="false"
-            app:summary="Note that this is the absolute minimum! Always transfer a bit more because of the continues market changes."/>
-
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="Owned token">
-
-        <SwitchPreferenceCompat
             app:key="@string/owned_currency_key"
-            app:title="Show owned token in app"
-            app:defaultValue="false"
-            app:summary="Shows the current total value of [amount] [token] in your chosen currency" />
+            app:title="Show owned token(s)"
+            app:defaultValue="true"
+            app:summary="Allows you to add crypto tokens with a amount, so it can display the live total market value" />
 
-        <EditTextPreference
-            app:key="@string/amount_owned_tokens_key"
-            app:title="Set amount"
-            app:useSimpleSummaryProvider="true" />
-
-        <ListPreference
-            app:key="@string/token_list_key"
-            app:title="Select token"
-            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 

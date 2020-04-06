@@ -3,16 +3,16 @@ package com.dummycoding.blinxtools.di;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.dummycoding.blinxtools.BlinxTools;
-import com.dummycoding.blinxtools.R;
 import com.dummycoding.blinxtools.data.network.BitBlinxApi;
 import com.dummycoding.blinxtools.data.network.CoinDeskApi;
+import com.dummycoding.blinxtools.data.network.RealmManager;
 import com.dummycoding.blinxtools.data.network.Repository;
 import com.dummycoding.blinxtools.data.network.RepositoryImpl;
 import com.dummycoding.blinxtools.usecases.FetchActiveCurrenciesUseCase;
 import com.dummycoding.blinxtools.usecases.FetchAvailableCurrenciesUseCase;
 import com.dummycoding.blinxtools.usecases.FetchPricesUseCase;
 
+import io.realm.Realm;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
@@ -28,6 +28,7 @@ public class CompositionRoot {
     private CoinDeskApi mCoinDeskApi;
     private SharedPreferences mSharedPreferences;
     private Repository mRepository;
+    private RealmManager mRealmManager;
 
     public CompositionRoot(Context context) {
         mContext = context;
@@ -80,10 +81,20 @@ public class CompositionRoot {
 
     public Repository getRepository() {
         if (mRepository == null) {
-            mRepository = new RepositoryImpl(getApplicationContext(), getSharedPreferences());
+            mRepository = new RepositoryImpl(getApplicationContext(), getSharedPreferences(), getRealmManager());
         }
         return mRepository;
     }
+
+    private RealmManager getRealmManager() {
+        if (mRealmManager == null) {
+            Realm.init(getApplicationContext());
+            mRealmManager = new RealmManager();
+        }
+        return mRealmManager;
+    }
+
+    /// Public methods
 
     public FetchPricesUseCase getFetchPricesUseCase() {
         return new FetchPricesUseCase(getCoinDeskApi());

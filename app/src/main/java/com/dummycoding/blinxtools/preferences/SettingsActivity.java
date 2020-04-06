@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -54,12 +53,12 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            CharSequence[] entries = { "BTC", "GTPLUS", "GTFTA" };
+            /*CharSequence[] entries = { "BTC", "GTPLUS", "GTFTA" };
             CharSequence[] entryValues = { "btc", "gtplus", "gtfta" };
 
             mListPreference = getPreferenceManager().findPreference(getString(R.string.token_list_key));
             mListPreference.setEntries(entries);
-            mListPreference.setEntryValues(entryValues);
+            mListPreference.setEntryValues(entryValues);*/
 
             return super.onCreateView(inflater, container, savedInstanceState);
         }

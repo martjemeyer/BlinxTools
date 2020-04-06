@@ -3,7 +3,6 @@ package com.dummycoding.blinxtools.main;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,17 +13,21 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dummycoding.blinxtools.BaseActivity;
 import com.dummycoding.blinxtools.R;
+import com.dummycoding.blinxtools.models.BitBlinxResult;
 import com.dummycoding.blinxtools.pojos.bitblinx.Result;
 import com.dummycoding.blinxtools.pojos.coindesk.BpiCurrency;
-import com.dummycoding.blinxtools.pojos.coindesk.Currency;
 import com.dummycoding.blinxtools.pojos.coindesk.CurrentPrice;
 import com.dummycoding.blinxtools.preferences.SettingsActivity;
 import com.dummycoding.blinxtools.usecases.FetchActiveCurrenciesUseCase;
 import com.dummycoding.blinxtools.usecases.FetchAvailableCurrenciesUseCase;
 import com.dummycoding.blinxtools.usecases.FetchPricesUseCase;
 
-import java.util.Objects;
+import org.intellij.lang.annotations.Flow;
 
+import java.util.Objects;
+import java.util.Observable;
+
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -128,7 +131,7 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
                             Toast.makeText(this, "Error getting CoinDesk data", Toast.LENGTH_LONG).show();
                             Timber.e(throwable, "buttonPressed: ");
                             mViewMvc.showProgressBar(false);
-                });
+                        });
     }
 
     @Override
@@ -154,16 +157,20 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
 
         mFetchActiveCurrenciesUseCase.getActiveCurrencies()
                 .subscribeOn(Schedulers.io())
-                .map(activeCurrencies -> activeCurrencies.getResult())
+                .map(activeCurrencies -> activeCurrencies.getResult()).toFlowable()
+                .flatMap(result -> Flowable.fromIterable(result))
+                .map(result -> BitBlinxResult.shallowCopy(result))
+                .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(results -> {
-                    Result firstResult = results.get(0);
+                    /*BitBlinxResult firstResult = results.get(0);
                     if (firstResult.symbol.contains("GTPLUS/BTC")) {
                         float preferredCurrency = getCompositionRoot().getRepository().getBtcValueForPreferredCurrency();
                         mViewMvc.updateCurrentValueOwnedToken(Float.parseFloat(firstResult.last) * preferredCurrency * 500 + "");
-                    }
-                    mViewMvc.updateAdapter(results);
+                    }*/
+                    //mViewMvc.updateAdapter(results);
                     mSwipeRefreshLayout.setRefreshing(false);
+                    getCompositionRoot().getRepository().storeLatestBitBlinxData(results);
                 }, throwable -> {
                     Toast.makeText(this, "Error getting BitBlinx data", Toast.LENGTH_LONG).show();
                     Timber.e(throwable, "buttonPressed: ");

@@ -1,8 +1,13 @@
 package com.dummycoding.blinxtools.models;
 
+import com.dummycoding.blinxtools.pojos.bitblinx.Result;
+
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class BitBlinxResult extends RealmObject {
+    @PrimaryKey
+    private String symbol;
     private String ask;
     private String bid;
     private String last;
@@ -13,7 +18,21 @@ public class BitBlinxResult extends RealmObject {
     private BitBlinxLiquidity liquidity;
     private BitBlinxVolume volume;
     private String timestamp;
-    private String symbol;
+
+    public static BitBlinxResult shallowCopy(Result result) {
+        BitBlinxResult copy = new BitBlinxResult();
+        copy.symbol = result.symbol;
+        copy.ask = result.ask;
+        copy.bid = result.bid;
+        copy.last = result.last;
+        copy.open = result.open;
+        copy.low = result.low;
+        copy.high = result.high;
+        copy.priceChange = result.priceChange;
+        copy.timestamp = result.timestamp;
+
+        return copy;
+    }
 
     public String getAsk() {
         return ask;
