@@ -1,5 +1,5 @@
 
-package com.dummycoding.blinxtools.pojos.bitblinx;
+package com.dummycoding.blinxtools.models.bitblinx;
 
 import com.squareup.moshi.Json;
 

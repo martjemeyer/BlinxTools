@@ -1,9 +1,14 @@
 package com.dummycoding.blinxtools.data.network;
 
-import com.dummycoding.blinxtools.models.BitBlinxResult;
+import com.dummycoding.blinxtools.models.OwnedToken;
+import com.dummycoding.blinxtools.models.bitblinx.Result;
+import com.dummycoding.blinxtools.models.coindesk.Currency;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 public interface Repository {
 
@@ -15,9 +20,24 @@ public interface Repository {
     void setBtcValueForPreferredCurrency(float value);
 
     // DB
-    boolean storeLatestBitBlinxData(List<BitBlinxResult> bitBlinxResult);
+    Completable storeLatestBitBlinxData(List<Result> bitBlinxResult);
 
-    List<BitBlinxResult> getLatestBitBlinxData();
+    Completable storeCoinDeskCurrencies(List<Currency> coinDeskCurrencies);
 
+    Completable storeOwnedToken(OwnedToken ownedToken);
+
+    Flowable<List<Result>> getBitBlinxDataFlowable();
+
+    Flowable<List<OwnedToken>> getOwnedTokensFlowable();
+
+    Flowable<List<Currency>> getCoinDeskCurrenciesFlowable();
+
+    Flowable<List<String>> getCoinDeskCurrencyStringsFlowable();
+
+    Flowable<List<String>> getCoinDeskCountryStringsFlowable();
+
+    Single<List<String>> getAllBtcPairs();
+
+    Single<List<Result>> getTokenBySymbol(String symbol);
 
 }

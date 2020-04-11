@@ -11,7 +11,7 @@ import com.dummycoding.blinxtools.di.CompositionRoot;
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
-    protected CompositionRoot getCompositionRoot() {
+    public CompositionRoot getCompositionRoot() {
         return ((BlinxTools)getApplication()).getCompositionRoot();
     }
 }

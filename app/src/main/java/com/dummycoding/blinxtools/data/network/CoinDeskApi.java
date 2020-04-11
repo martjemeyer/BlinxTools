@@ -1,7 +1,7 @@
 package com.dummycoding.blinxtools.data.network;
 
-import com.dummycoding.blinxtools.pojos.coindesk.Currency;
-import com.dummycoding.blinxtools.pojos.coindesk.CurrentPrice;
+import com.dummycoding.blinxtools.models.coindesk.Currency;
+import com.dummycoding.blinxtools.models.coindesk.CurrentPrice;
 
 import java.util.List;
 

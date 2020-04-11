@@ -24,12 +24,11 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardElevation="2dp" >
+        app:cardElevation="0dp" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/bitcoinImage"
@@ -67,23 +66,33 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bitcoinImage"
                 android:layout_marginTop="4dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 style="@style/OwnedCurrencies"
-                android:text="Owned Currencies"  />
+                android:textColor="@color/primary"
+                android:text="Owned Tokens"  />
 
-            <TextView
-                android:id="@+id/minimumFundAccountTv"
-                style="@style/ValuesDetailsBtc"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ownedTokensRecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/min_gtplus_for_funding"
-                tools:text="500 GTPLUS = 50 EUR"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ownedCurrenciesTv"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                />
+                android:layout_marginStart="8dp"
+                android:paddingBottom="4dp"
+                tools:listitem="@layout/owned_currency_item"
+                tools:itemCount="2" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="8dp"
+                app:fabSize="mini"
+                app:backgroundTint="@color/primary"
+                app:srcCompat="@drawable/plus"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,7 +109,7 @@
         app:layout_constraintTop_toBottomOf="@id/ownedCurrenciesCard">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/pairsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

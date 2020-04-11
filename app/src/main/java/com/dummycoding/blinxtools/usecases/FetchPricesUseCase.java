@@ -1,7 +1,7 @@
 package com.dummycoding.blinxtools.usecases;
 
 import com.dummycoding.blinxtools.data.network.CoinDeskApi;
-import com.dummycoding.blinxtools.pojos.coindesk.CurrentPrice;
+import com.dummycoding.blinxtools.models.coindesk.CurrentPrice;
 
 import io.reactivex.Single;
 

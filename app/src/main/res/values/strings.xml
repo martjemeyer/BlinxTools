@@ -3,6 +3,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="bitcoin_logo">Bitcoin logo</string>
     <string name="current_btc_price">Current BTC price = %1$s %2$s</string>
-    <string name="min_gtplus_for_funding">500 GTPLUS = %1$s %2$s</string>
+    <string name="chosen_currency">%1$d %2$s</string>
+    <string name="chosen_currency_value">%1$S %2$s</string>
 
 </resources>

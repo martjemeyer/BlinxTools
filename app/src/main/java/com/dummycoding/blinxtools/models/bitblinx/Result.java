@@ -1,38 +1,45 @@
-package com.dummycoding.blinxtools.models;
+package com.dummycoding.blinxtools.models.bitblinx;
 
-import com.dummycoding.blinxtools.pojos.bitblinx.Result;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import com.squareup.moshi.Json;
 
-public class BitBlinxResult extends RealmObject {
+import java.io.Serializable;
+
+@Entity
+public class Result implements Serializable {
+
     @PrimaryKey
-    private String symbol;
+    @NonNull
+    @Json(name = "symbol")
+    private String symbol = "";
+    @Json(name = "ask")
     private String ask;
+    @Json(name = "bid")
     private String bid;
+    @Json(name = "last")
     private String last;
+    @Json(name = "open")
     private String open;
+    @Json(name = "low")
     private String low;
+    @Json(name = "high")
     private String high;
+    @Json(name = "priceChange")
     private String priceChange;
-    private BitBlinxLiquidity liquidity;
-    private BitBlinxVolume volume;
+    @Ignore
+    @Json(name = "liquidity")
+    private Liquidity liquidity;
+    @Ignore
+    @Json(name = "volume")
+    private Volume volume;
+    @Json(name = "timestamp")
     private String timestamp;
 
-    public static BitBlinxResult shallowCopy(Result result) {
-        BitBlinxResult copy = new BitBlinxResult();
-        copy.symbol = result.symbol;
-        copy.ask = result.ask;
-        copy.bid = result.bid;
-        copy.last = result.last;
-        copy.open = result.open;
-        copy.low = result.low;
-        copy.high = result.high;
-        copy.priceChange = result.priceChange;
-        copy.timestamp = result.timestamp;
-
-        return copy;
-    }
+    //private boolean favorited = false;
 
     public String getAsk() {
         return ask;
@@ -90,19 +97,19 @@ public class BitBlinxResult extends RealmObject {
         this.priceChange = priceChange;
     }
 
-    public BitBlinxLiquidity getLiquidity() {
+    public Liquidity getLiquidity() {
         return liquidity;
     }
 
-    public void setLiquidity(BitBlinxLiquidity liquidity) {
+    public void setLiquidity(Liquidity liquidity) {
         this.liquidity = liquidity;
     }
 
-    public BitBlinxVolume getVolume() {
+    public Volume getVolume() {
         return volume;
     }
 
-    public void setVolume(BitBlinxVolume volume) {
+    public void setVolume(Volume volume) {
         this.volume = volume;
     }
 
@@ -121,4 +128,5 @@ public class BitBlinxResult extends RealmObject {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
+
 }

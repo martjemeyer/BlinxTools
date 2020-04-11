@@ -4,33 +4,36 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.dummycoding.blinxtools.R;
-import com.dummycoding.blinxtools.models.BitBlinxResult;
+import com.dummycoding.blinxtools.models.OwnedToken;
+import com.dummycoding.blinxtools.models.bitblinx.Result;
+import com.dummycoding.blinxtools.models.coindesk.Currency;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+import io.reactivex.processors.BehaviorProcessor;
 
 public class RepositoryImpl implements Repository {
-
+    private final String DB_NAME = "db-blinxtools";
     private final Context mContext;
     private final SharedPreferences mPreferences;
-    private final RealmManager mRealmManager;
+    private BlinxRoomDatabase mDatabase;
+    private BehaviorProcessor<List<Result>> bitBlinxResultProcessor = BehaviorProcessor.create();
 
-    public RepositoryImpl(Context context, SharedPreferences sharedPreferences, RealmManager realmManager) {
+    public RepositoryImpl(Context context, SharedPreferences sharedPreferences) {
         mContext = context;
         mPreferences = sharedPreferences;
-        mRealmManager = realmManager;
-        mRealmManager.openLocalInstance();
+        mDatabase = BlinxRoomDatabase.getDatabase(context);
     }
 
     private SharedPreferences.Editor getEditor() {
         return mPreferences.edit();
     }
-    private Realm getRealm() {
-        return mRealmManager.getLocalInstance();
+
+    private void getBitBlinxResultAsFlowable() {
+
     }
 
     @Override
@@ -51,19 +54,52 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public boolean storeLatestBitBlinxData(List<BitBlinxResult> bitBlinxResult) {
-        RealmList<BitBlinxResult> realmList = new RealmList<>();
-        realmList.addAll(bitBlinxResult);
-
-        getRealm().beginTransaction();
-        getRealm().insertOrUpdate(realmList);
-        getRealm().commitTransaction();
-        return true;
+    public Completable storeLatestBitBlinxData(List<Result> bitBlinxResult) {
+        return mDatabase.blinxResultDao().insertResults(bitBlinxResult);
     }
 
     @Override
-    public List<BitBlinxResult> getLatestBitBlinxData() {
-        RealmResults<BitBlinxResult> results = getRealm().where(BitBlinxResult.class).findAll();
-        return getRealm().copyFromRealm(results);
+    public Completable storeCoinDeskCurrencies(List<Currency> coinDeskCurrencies) {
+        return mDatabase.coinDeskCurrencyDao().insertCurrencies(coinDeskCurrencies);
+    }
+
+    @Override
+    public Completable storeOwnedToken(OwnedToken ownedToken) {
+        return mDatabase.ownedTokenDao().insertOwnedToken(ownedToken);
+    }
+
+    @Override
+    public Flowable<List<Result>> getBitBlinxDataFlowable() {
+        return mDatabase.blinxResultDao().getAllResults();
+    }
+
+    @Override
+    public Flowable<List<OwnedToken>> getOwnedTokensFlowable() {
+        return mDatabase.ownedTokenDao().getAllOwnedTokens();
+    }
+
+    @Override
+    public Flowable<List<Currency>> getCoinDeskCurrenciesFlowable() {
+        return mDatabase.coinDeskCurrencyDao().getAllCurrencies();
+    }
+
+    @Override
+    public Flowable<List<String>> getCoinDeskCurrencyStringsFlowable() {
+        return mDatabase.coinDeskCurrencyDao().getAllCurrencyStrings();
+    }
+
+    @Override
+    public Flowable<List<String>> getCoinDeskCountryStringsFlowable() {
+        return mDatabase.coinDeskCurrencyDao().getAllCountryStrings();
+    }
+
+    @Override
+    public Single<List<String>> getAllBtcPairs() {
+        return mDatabase.blinxResultDao().getAllBtcPairs();
+    }
+
+    @Override
+    public Single<List<Result>> getTokenBySymbol(String symbol) {
+        return mDatabase.blinxResultDao().getTokenBySymbol(symbol);
     }
 }

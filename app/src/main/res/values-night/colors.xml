@@ -9,8 +9,9 @@
     <color name="background">#121212</color>
     <color name="surface">#121212</color>
     <color name="onSurface">#FFFFFF</color>
-    <color name="error">#CF6679</color>
+    <color name="error">#ea959b</color>
     <color name="onError">#000000</color>
+    <color name="green">#9ad9ac</color>
 
     <color name="topBar">#FFCC80</color>
     <color name="toolbar_background">#272727</color>

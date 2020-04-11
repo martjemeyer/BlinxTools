@@ -1,7 +1,7 @@
 package com.dummycoding.blinxtools.usecases;
 
 import com.dummycoding.blinxtools.data.network.CoinDeskApi;
-import com.dummycoding.blinxtools.pojos.coindesk.Currency;
+import com.dummycoding.blinxtools.models.coindesk.Currency;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.dummycoding.blinxtools.pojos.coindesk;
+package com.dummycoding.blinxtools.models.coindesk;
 
 import com.squareup.moshi.Json;
 

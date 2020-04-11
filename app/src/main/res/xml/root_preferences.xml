@@ -2,22 +2,27 @@
 
     <PreferenceCategory app:title="General">
 
-        <EditTextPreference
+        <ListPreference
             app:key="@string/preferred_currency_key"
-            app:title="Select your preferred currency"
-            app:defaultValue="EUR"
-            app:useSimpleSummaryProvider="true" />
+            app:title="Select your fiat currency"
+            app:summary="EUR" />
 
         <SwitchPreferenceCompat
             app:key="@string/owned_currency_key"
             app:title="Show owned token(s)"
             app:defaultValue="true"
-            app:summary="Allows you to add crypto tokens with a amount, so it can display the live total market value" />
+            app:summary="Allows you to add crypto tokens with a custom amount to display the live total market value" />
 
 
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Market list">
+
+        <SwitchPreferenceCompat
+            app:key="@string/show_only_favorite_pairs_key"
+            app:title="Show only favorite pairs"
+            app:defaultValue="false"
+            app:summary="You can favorite pairs by tapping on them" />
 
         <SwitchPreferenceCompat
             app:key="@string/high_low_key_24h"
