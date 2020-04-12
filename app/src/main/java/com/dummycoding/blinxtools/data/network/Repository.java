@@ -19,6 +19,12 @@ public interface Repository {
 
     void setBtcValueForPreferredCurrency(float value);
 
+    boolean getOnlyFavoritesResults();
+
+    void setFavorites(List<String> favorites);
+
+    List<String> getFavorites();
+
     // DB
     Completable storeLatestBitBlinxData(List<Result> bitBlinxResult);
 
@@ -26,7 +32,13 @@ public interface Repository {
 
     Completable storeOwnedToken(OwnedToken ownedToken);
 
+    Completable deleteOwnedToken(OwnedToken ownedToken);
+
+    Completable updateBitBlinxResult(Result result);
+
     Flowable<List<Result>> getBitBlinxDataFlowable();
+
+    Flowable<List<Result>> getBitBlinxFavoriteDataFlowable();
 
     Flowable<List<OwnedToken>> getOwnedTokensFlowable();
 
@@ -39,5 +51,7 @@ public interface Repository {
     Single<List<String>> getAllBtcPairs();
 
     Single<List<Result>> getTokenBySymbol(String symbol);
+
+
 
 }

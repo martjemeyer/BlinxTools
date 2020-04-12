@@ -1,6 +1,7 @@
 package com.dummycoding.blinxtools.models;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -8,17 +9,16 @@ public class OwnedToken {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String token;
-    private int tokenAmount;
+    private double tokenAmount;
     private double tokenInBtc;
-    private double btcInFiat;
-    private String fiatCurrency;
 
-    public OwnedToken(String token, int tokenAmount, double tokenInBtc, double btcInFiat, String fiatCurrency) {
+    public OwnedToken(String token, double tokenAmount) {
         this.token = token;
         this.tokenAmount = tokenAmount;
-        this.tokenInBtc = tokenInBtc;
-        this.btcInFiat = btcInFiat;
-        this.fiatCurrency = fiatCurrency;
+    }
+
+    @Ignore
+    public OwnedToken() {
     }
 
     public int getId() {
@@ -29,14 +29,6 @@ public class OwnedToken {
         this.id = id;
     }
 
-    public void setTokenInBtc(double tokenInBtc) {
-        this.tokenInBtc = tokenInBtc;
-    }
-
-    public void setBtcInFiat(double btcInFiat) {
-        this.btcInFiat = btcInFiat;
-    }
-
     public String getToken() {
         return token;
     }
@@ -45,11 +37,11 @@ public class OwnedToken {
         this.token = token;
     }
 
-    public int getTokenAmount() {
+    public double getTokenAmount() {
         return tokenAmount;
     }
 
-    public void setTokenAmount(int tokenAmount) {
+    public void setTokenAmount(double tokenAmount) {
         this.tokenAmount = tokenAmount;
     }
 
@@ -57,23 +49,7 @@ public class OwnedToken {
         return tokenInBtc;
     }
 
-    public void setTokenInBtc(float tokenInBtc) {
+    public void setTokenInBtc(double tokenInBtc) {
         this.tokenInBtc = tokenInBtc;
-    }
-
-    public double getBtcInFiat() {
-        return btcInFiat;
-    }
-
-    public void setBtcInFiat(float btcInFiat) {
-        this.btcInFiat = btcInFiat;
-    }
-
-    public String getFiatCurrency() {
-        return fiatCurrency;
-    }
-
-    public void setFiatCurrency(String fiatCurrency) {
-        this.fiatCurrency = fiatCurrency;
     }
 }

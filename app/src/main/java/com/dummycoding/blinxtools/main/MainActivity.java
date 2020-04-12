@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -19,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.dummycoding.blinxtools.BaseActivity;
 import com.dummycoding.blinxtools.R;
 import com.dummycoding.blinxtools.adapters.BitBlinxMainAdapter;
+import com.dummycoding.blinxtools.adapters.BitBlinxMainAdapterCallback;
 import com.dummycoding.blinxtools.adapters.OwnedTokensAdapter;
 import com.dummycoding.blinxtools.adapters.OwnedTokensAdapterCallback;
 import com.dummycoding.blinxtools.helpers.CurrencyHelper;
@@ -33,6 +33,8 @@ import com.dummycoding.blinxtools.usecases.FetchActiveTokenPairsUseCase;
 import com.dummycoding.blinxtools.usecases.FetchAvailableCurrenciesUseCase;
 import com.dummycoding.blinxtools.usecases.FetchPricesUseCase;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +46,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity implements MainViewMvc.Listener, OwnedTokensAdapterCallback, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends BaseActivity implements MainViewMvc.Listener, OwnedTokensAdapterCallback, BitBlinxMainAdapterCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private MainViewMvc mViewMvc;
     private BitBlinxMainAdapter mBitBlinxMainAdapter;
@@ -74,7 +76,7 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.primary);
 
-        mBitBlinxMainAdapter = new BitBlinxMainAdapter(this, new ArrayList<>());
+        mBitBlinxMainAdapter = new BitBlinxMainAdapter(this, new ArrayList<>(), this);
         mOwnedTokensAdapter = new OwnedTokensAdapter(this, new ArrayList<>(), this);
 
         mViewMvc.setPairsRecyclerViewAdapter(mBitBlinxMainAdapter);
@@ -103,7 +105,6 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
     protected void onResume() {
         super.onResume();
         subscriptions.addAll(getBitBlinxResultDbChangesSubscription(), getOwnedTokenDbChangesSubscription());
-        getBitBlinxResultDbChangesSubscription();
         getOwnedTokenDbChangesSubscription();
 
         onRefresh();
@@ -114,13 +115,15 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
         super.onPause();
         subscriptions.clear();
     }
-    
+
     private void updatePairsAdapter(List<Result> results) {
         mBitBlinxMainAdapter.updateAdapter(results);
     }
 
     private void updateOwnedTokensAdapter(List<OwnedToken> ownedTokens) {
-        mOwnedTokensAdapter.updateAdapter(ownedTokens);
+        double btcInCurrency = getCompositionRoot().getRepository().getBtcValueForPreferredCurrency();
+        String preferredCurrency = getCompositionRoot().getRepository().getPreferredCurrency();
+        mOwnedTokensAdapter.updateAdapter(ownedTokens, btcInCurrency, preferredCurrency);
     }
 
     private void openSettings() {
@@ -129,16 +132,20 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
     }
 
     private Disposable getBitBlinxResultDbChangesSubscription() {
-        return getCompositionRoot().getRepository().getBitBlinxDataFlowable()
+        return (getCompositionRoot().getRepository().getOnlyFavoritesResults()
+                ? getCompositionRoot().getRepository().getBitBlinxFavoriteDataFlowable()
+                : getCompositionRoot().getRepository().getBitBlinxDataFlowable())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     String preferredCurrency = getCompositionRoot().getRepository().getPreferredCurrency();
-                    mViewMvc.updateCurrentValueBtc(CurrencyHelper.round(getCompositionRoot().getRepository().getBtcValueForPreferredCurrency()), preferredCurrency);
+                    double btcValue = getCompositionRoot().getRepository().getBtcValueForPreferredCurrency();
+                    if (btcValue > 0) {
+                        mViewMvc.updateCurrentValueBtc(CurrencyHelper.round(btcValue), preferredCurrency);
+                    }
                     updatePairsAdapter(result);
                     mOwnedTokensAdapter.notifyDataSetChanged(); // use latest rates
                 }, throwable -> Timber.e(throwable, "subscribeToBitBlinxResultDbChanges: "));
-
     }
 
     private Disposable getOwnedTokenDbChangesSubscription() {
@@ -150,9 +157,19 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
     }
 
     private Single<List<Result>> getActiveTokenPairs() {
+        List<String> favorites = getCompositionRoot().getRepository().getFavorites();
+
         return mFetchActiveTokenPairsUseCase.getActivePairs()
                 .subscribeOn(Schedulers.io())
-                .map(ActiveCurrencies::getResult);
+                .map(ActiveCurrencies::getResult)
+                .flattenAsFlowable(list -> list)
+                .map(result -> {
+                    if (favorites.contains(result.getSymbol())) {
+                        result.setFavorited(true);
+                    }
+                    return result;
+                })
+                .toList();
     }
 
     private Single<BpiCurrency> getActiveCurrencies() {
@@ -185,6 +202,7 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
                     getCompositionRoot().getRepository().storeLatestBitBlinxData(resultWrapper.getResult())
                             .subscribeOn(Schedulers.io())
                             .subscribe();
+                    mOwnedTokensAdapter.refreshWithUpdatedBtcCurrency(resultWrapper.getBpi().getRateFloat());
                 }, throwable -> Timber.e(throwable, "onRefresh: "));
     }
 
@@ -193,16 +211,9 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
         getLatestData();
     }
 
-    @Override
-    public void updateOwnedToken(OwnedToken ownedToken) {
-        getCompositionRoot().getRepository().storeOwnedToken(ownedToken)
-                .subscribeOn(Schedulers.io())
-                .subscribe();
-    }
-
     @SuppressLint("CheckResult")
     @Override
-    public void fabClicked() {
+    public void updateOwnedToken(OwnedToken ownedToken) {
         getCompositionRoot().getRepository().getAllBtcPairs()
                 .toFlowable()
                 .flatMapIterable(result -> result)
@@ -214,13 +225,33 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(tokens -> createEditOwnedTokenDialog(tokens, "Add Token"), throwable -> Timber.e(throwable, "fabClicked: "));
+                .subscribe(tokens -> createEditOwnedTokenDialog(tokens, ownedToken), throwable -> Timber.e(throwable, "fabClicked: "));
     }
 
-    private void createEditOwnedTokenDialog(List<String> tokens, String operation) {
+    @SuppressLint("CheckResult")
+    @Override
+    public void fabClicked() {
+        updateOwnedToken(new OwnedToken());
+    }
+
+    @Override
+    public void setFavorite(Result result) {
+        List<String> favorites = getCompositionRoot().getRepository().getFavorites();
+        if (favorites.contains(result.getSymbol())) {
+            favorites.remove(result.getSymbol());
+        } else {
+            favorites.add(result.getSymbol());
+        }
+        getCompositionRoot().getRepository().setFavorites(favorites);
+        getCompositionRoot().getRepository().updateBitBlinxResult(result)
+                .subscribeOn(Schedulers.io())
+                .subscribe();
+    }
+
+    private void createEditOwnedTokenDialog(List<String> tokens, OwnedToken ownedToken) {
         // create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(operation);
+        builder.setTitle("Add Token");
         // set the custom layout
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_owned_currency, null);
         builder.setView(customLayout);
@@ -231,32 +262,57 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener, 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        EditText editText = customLayout.findViewById(R.id.amount);
+
+        if (ownedToken.getId() >= 0) {
+            NumberFormat nf = new DecimalFormat("##.###");
+            int index = tokens.indexOf(ownedToken.getToken());
+            editText.setText(nf.format(ownedToken.getTokenAmount()));
+            spinner.setSelection(index);
+        }
+
         // add a button
         builder.setPositiveButton("Ok", (dialog, id) -> {
-            // send data from the AlertDialog to the Activity
-            EditText editText = customLayout.findViewById(R.id.amount);
-            sendDialogDataToActivity(editText.getText().toString(), spinner.getSelectedItem().toString());
+            try {
+                ownedToken.setToken(spinner.getSelectedItem().toString());
+                ownedToken.setTokenAmount(Double.parseDouble(editText.getText().toString()));
+                editOwnedToken(ownedToken);
+            } catch (Exception ex) {
+                Timber.e(ex.getMessage(), "createEditOwnedTokenDialog: ");
+            }
         });
 
         builder.setNegativeButton("Cancel", (dialog, id) -> {
             // do nothing
         });
+
+        if (ownedToken.getToken() != null) {
+            builder.setNegativeButton("Delete", (dialog, id) -> getCompositionRoot().getRepository().deleteOwnedToken(ownedToken)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe());
+        }
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     @SuppressLint("CheckResult")
-    private void sendDialogDataToActivity(String amount, String selectedToken) {
-        double btcInCurrency = getCompositionRoot().getRepository().getBtcValueForPreferredCurrency();
-        String preferredCurrency = getCompositionRoot().getRepository().getPreferredCurrency();
-        getCompositionRoot().getRepository().getTokenBySymbol(selectedToken + "/BTC")
-                .map(result -> result.get(0))
-                .subscribeOn(Schedulers.io())
-                .subscribe(token -> {
-                    OwnedToken ownedToken = new OwnedToken(selectedToken, Integer.parseInt(amount), Double.parseDouble(token.getLast()), btcInCurrency, preferredCurrency);
-                    getCompositionRoot().getRepository().storeOwnedToken(ownedToken).subscribe();
-                }, throwable -> Timber.e(throwable, "sendDialogDataToActivity: "));
+    private void editOwnedToken(OwnedToken ownedToken) {
+
+        if (ownedToken.getToken().equals("BTC")) {
+            ownedToken.setTokenInBtc(getCompositionRoot().getRepository().getBtcValueForPreferredCurrency());
+            getCompositionRoot().getRepository().storeOwnedToken(ownedToken)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe();
+        } else {
+            getCompositionRoot().getRepository().getTokenBySymbol(ownedToken.getToken() + "/BTC")
+                    .map(result -> result.get(0))
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(token -> {
+                        ownedToken.setTokenInBtc(Double.parseDouble(token.getLast()));
+                        getCompositionRoot().getRepository().storeOwnedToken(ownedToken).subscribe();
+                    }, throwable -> Timber.e(throwable, "sendDialogDataToActivity: "));
+        }
 
     }
 }

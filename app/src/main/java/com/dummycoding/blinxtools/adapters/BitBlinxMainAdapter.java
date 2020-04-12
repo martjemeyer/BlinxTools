@@ -28,12 +28,14 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
 
     private Context mContext;
     private List<Result> mPairs;
+    private BitBlinxMainAdapterCallback mActivityCallBack;
     private SharedPreferences mSharedPreferences;
     private boolean mShow24HighLow;
 
-    public BitBlinxMainAdapter(Context context, List<Result> pairs) {
+    public BitBlinxMainAdapter(Context context, List<Result> pairs, BitBlinxMainAdapterCallback callBack) {
         mContext = context;
         mPairs = pairs;
+        mActivityCallBack = callBack;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -48,6 +50,13 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
     public void onBindViewHolder(@NonNull MainHolder holder, int position) {
         Result result = mPairs.get(position);
         holder.setDetails(result);
+        holder.cardView.setOnClickListener(v -> handleOnCardClicked(position));
+    }
+
+    private void handleOnCardClicked(int position) {
+        Result result = mPairs.get(position);
+        result.setFavorited(!result.isFavorited());
+        mActivityCallBack.setFavorite(result);
     }
 
     @Override
@@ -122,6 +131,8 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
                 lowPriceDetailsBtc.setText(CurrencyHelper.removeTrailingZeros(result.getLow()) + " " + (btcPair ? "BTC" : rightPair));
             }
             setHighLowVisibility();
+
+            pair.setTextColor(mContext.getResources().getColor(result.isFavorited() ? R.color.primary : R.color.onSurface));
         }
 
         void setHighLowVisibility() {

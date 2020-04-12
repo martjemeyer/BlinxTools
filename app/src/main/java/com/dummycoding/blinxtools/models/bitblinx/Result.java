@@ -39,7 +39,7 @@ public class Result implements Serializable {
     @Json(name = "timestamp")
     private String timestamp;
 
-    //private boolean favorited = false;
+    private boolean favorited = false;
 
     public String getAsk() {
         return ask;
@@ -129,4 +129,11 @@ public class Result implements Serializable {
         this.symbol = symbol;
     }
 
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
 }

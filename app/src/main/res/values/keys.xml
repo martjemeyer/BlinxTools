@@ -7,5 +7,6 @@
     <string name="preferred_currency_key">preferred_currency_key</string>
     <string name="btc_value_for_preferred_currency_key">btc_value_for_preferred_currency_key</string>
     <string name="show_only_favorite_pairs_key">show_only_favorite_pairs_key</string>
+    <string name="list_favorites_key">list_favorites_key</string>
 
 </resources>

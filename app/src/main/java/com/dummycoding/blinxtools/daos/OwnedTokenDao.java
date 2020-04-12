@@ -1,6 +1,7 @@
 package com.dummycoding.blinxtools.daos;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -19,4 +20,7 @@ public interface OwnedTokenDao {
 
     @Query("SELECT * FROM OwnedToken")
     Flowable<List<OwnedToken>> getAllOwnedTokens();
+
+    @Delete
+    Completable delete(OwnedToken ownedToken);
 }

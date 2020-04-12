@@ -14,14 +14,17 @@ import com.dummycoding.blinxtools.R;
 import com.dummycoding.blinxtools.helpers.CurrencyHelper;
 import com.dummycoding.blinxtools.models.OwnedToken;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
-import java.util.Random;
 
 public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.OwnedTokensHolder> {
 
     private Context mContext;
     private List<OwnedToken> mOwnedTokens;
     private OwnedTokensAdapterCallback mActivityCallBack;
+    private double mBtcInCurrency = -1;
+    private String mPreferredCurrency = "";
 
     public OwnedTokensAdapter(Context context, List<OwnedToken> ownedTokens, OwnedTokensAdapterCallback callBack) {
         mContext = context;
@@ -45,13 +48,7 @@ public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.
     }
 
     private void handleEditButtonClicked(int position) {
-        OwnedToken ownedToken = mOwnedTokens.get(position);
-        Random r = new Random();
-        int low = 100;
-        int high = 10000;
-        int result = r.nextInt(high-low) + low;
-        ownedToken.setTokenAmount(result);
-        mActivityCallBack.updateOwnedToken(ownedToken);
+        mActivityCallBack.updateOwnedToken(mOwnedTokens.get(position));
     }
 
     @Override
@@ -59,8 +56,15 @@ public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.
         return mOwnedTokens.size();
     }
 
-    public void updateAdapter(List<OwnedToken> ownedTokens) {
+    public void updateAdapter(List<OwnedToken> ownedTokens, double btcInCurrency, String preferredCurrency) {
         mOwnedTokens = ownedTokens;
+        mBtcInCurrency = btcInCurrency;
+        mPreferredCurrency = preferredCurrency;
+        notifyDataSetChanged();
+    }
+
+    public void refreshWithUpdatedBtcCurrency(double btcInCurrency) {
+        mBtcInCurrency = btcInCurrency;
         notifyDataSetChanged();
     }
 
@@ -79,12 +83,13 @@ public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.
         }
 
         void setDetails(OwnedToken ownedToken) {
+            NumberFormat nf = new DecimalFormat("##.###");
             token.setText(String.format(mContext.getString(R.string.chosen_currency),
-                    ownedToken.getTokenAmount(), ownedToken.getToken()));
+                    nf.format(ownedToken.getTokenAmount()), ownedToken.getToken()));
 
-            double totalTokenInBFiat = ownedToken.getTokenAmount() * ownedToken.getTokenInBtc() * ownedToken.getBtcInFiat();
+            double totalTokenInBFiat = ownedToken.getToken().equals("BTC") ? ownedToken.getTokenAmount() * mBtcInCurrency : ownedToken.getTokenAmount() * ownedToken.getTokenInBtc() * mBtcInCurrency;
             tokenValue.setText(String.format(mContext.getString(R.string.chosen_currency_value),
-                    CurrencyHelper.round(totalTokenInBFiat), ownedToken.getFiatCurrency()));
+                    CurrencyHelper.round(totalTokenInBFiat), mPreferredCurrency));
         }
     }
 }

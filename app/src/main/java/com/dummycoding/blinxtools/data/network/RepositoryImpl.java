@@ -7,7 +7,10 @@ import com.dummycoding.blinxtools.R;
 import com.dummycoding.blinxtools.models.OwnedToken;
 import com.dummycoding.blinxtools.models.bitblinx.Result;
 import com.dummycoding.blinxtools.models.coindesk.Currency;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -19,6 +22,7 @@ public class RepositoryImpl implements Repository {
     private final String DB_NAME = "db-blinxtools";
     private final Context mContext;
     private final SharedPreferences mPreferences;
+    private final Gson mGson;
     private BlinxRoomDatabase mDatabase;
     private BehaviorProcessor<List<Result>> bitBlinxResultProcessor = BehaviorProcessor.create();
 
@@ -26,6 +30,7 @@ public class RepositoryImpl implements Repository {
         mContext = context;
         mPreferences = sharedPreferences;
         mDatabase = BlinxRoomDatabase.getDatabase(context);
+        mGson = new Gson();
     }
 
     private SharedPreferences.Editor getEditor() {
@@ -54,6 +59,26 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public boolean getOnlyFavoritesResults() {
+        return mPreferences.getBoolean(mContext.getString(R.string.show_only_favorite_pairs_key), false);
+    }
+
+    @Override
+    public List<String> getFavorites() {
+        String favoritesJson = mPreferences.getString(mContext.getString(R.string.list_favorites_key), "");
+        List<String> favorites = mGson.fromJson(favoritesJson, new TypeToken<ArrayList<String>>() {}.getType());
+        return favorites != null ? favorites : new ArrayList<>();
+    }
+
+    @Override
+    public void setFavorites(List<String> favorites) {
+        String favoritesJson = mGson.toJson(favorites);
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(mContext.getString(R.string.list_favorites_key), favoritesJson);
+        editor.apply();
+    }
+
+    @Override
     public Completable storeLatestBitBlinxData(List<Result> bitBlinxResult) {
         return mDatabase.blinxResultDao().insertResults(bitBlinxResult);
     }
@@ -71,6 +96,11 @@ public class RepositoryImpl implements Repository {
     @Override
     public Flowable<List<Result>> getBitBlinxDataFlowable() {
         return mDatabase.blinxResultDao().getAllResults();
+    }
+
+    @Override
+    public Flowable<List<Result>> getBitBlinxFavoriteDataFlowable() {
+        return mDatabase.blinxResultDao().getAllFavoriteResults();
     }
 
     @Override
@@ -101,5 +131,15 @@ public class RepositoryImpl implements Repository {
     @Override
     public Single<List<Result>> getTokenBySymbol(String symbol) {
         return mDatabase.blinxResultDao().getTokenBySymbol(symbol);
+    }
+
+    @Override
+    public Completable deleteOwnedToken(OwnedToken ownedToken) {
+        return mDatabase.ownedTokenDao().delete(ownedToken);
+    }
+
+    @Override
+    public Completable updateBitBlinxResult(Result result) {
+        return mDatabase.blinxResultDao().updateResult(result);
     }
 }

@@ -25,29 +25,29 @@
         app:layout_constraintTop_toBottomOf="@+id/removeTokenButton"
         app:layout_constraintBottom_toTopOf="@+id/removeTokenButton"
         android:layout_marginStart="16dp"
-        style="@style/ValuesDetailsBtc"
+        style="@style/OwnedToken"
         android:text="@string/chosen_currency"
         tools:text="500 GTPLUS" />
 
     <TextView
         android:id="@+id/chosenTokenEqualsSign"
-        style="@style/ValuesDetailsBtc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/primary"
         app:layout_constraintStart_toEndOf="@+id/chosenToken"
         app:layout_constraintTop_toTopOf="@+id/chosenToken"
+        style="@style/OwnedToken"
         android:textStyle="bold"
         android:text=" = " />
 
     <TextView
         android:id="@+id/chosenTokenValue"
-        style="@style/ValuesDetailsBtc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/chosen_currency_value"
         app:layout_constraintStart_toEndOf="@+id/chosenTokenEqualsSign"
         app:layout_constraintTop_toTopOf="@+id/chosenToken"
+        android:text="@string/chosen_currency_value"
+        style="@style/OwnedToken"
         tools:text="50 EUR" />
 
 
