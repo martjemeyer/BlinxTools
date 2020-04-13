@@ -1,6 +1,7 @@
 package com.dummycoding.mycrypto.main;
 
 import android.content.Context;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -27,8 +28,23 @@ public class MainViewMvcImpl extends BaseViewMvc<MainViewMvc.Listener> implement
         view.ownedTokensRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         view.fab.setOnClickListener(v -> editOwnedCurrency());
+        view.poweredByCoinDesk.setOnClickListener(v -> coinDeskHyperLinkPressed());
+        view.poweredByBitBlinx.setOnClickListener(v -> bitBlinxHyperLinkPressed());
+        view.infoFab.setOnClickListener(v -> onInfoFabPressed());
 
         mListener = listener;
+    }
+
+    private void onInfoFabPressed() {
+        mListener.onInfoFabPressed();
+    }
+
+    private void bitBlinxHyperLinkPressed() {
+        view.poweredByBitBlinx.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void coinDeskHyperLinkPressed() {
+        view.poweredByCoinDesk.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void editOwnedCurrency() {

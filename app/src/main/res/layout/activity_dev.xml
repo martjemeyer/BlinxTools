@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".dev.DevActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/toolbar_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
+        app:title="Development" />
+
+    <TextView
+        android:id="@+id/telegramHandle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/telegramHandleValue"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        style="@style/OwnedCurrencies"
+        android:text="Telegram handle:" />
+
+    <TextView
+        android:id="@+id/telegramHandleHyperlink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/gtPlusAccountInfo"
+        app:layout_constraintStart_toEndOf="@+id/telegramHandleValue"
+        android:layout_marginBottom="8dp"
+        android:text="https://t.me/martjemeyer"/>
+
+    <TextView
+        android:id="@+id/telegramHandleValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/gtPlusAccountInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="\@martjemeyer  /  "/>
+
+    <TextView
+        android:id="@+id/gtPlusAccountInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/gtPlusValue"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        style="@style/OwnedCurrencies"
+        android:text="GTPLUS Wallet:" />
+
+    <TextView
+        android:id="@+id/gtPlusValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/gtPlusMemo"
+        app:layout_constraintEnd_toStartOf="@+id/gtPlusWalletCopy"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="GAKLC7TZJYBMCHLATFLCJXDTYCYZOHE4GL6MQ2NFPEDAYK5MBELACZAQ" />
+
+    <ImageButton
+        android:id="@+id/gtPlusWalletCopy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/gtPlusAccountInfo"
+        app:layout_constraintBottom_toTopOf="@+id/gtPlusValue"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:background="@color/background"
+        android:src="@drawable/content_copy" />
+
+    <TextView
+        android:id="@+id/gtPlusMemo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/gtPlusMemoValue"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        style="@style/OwnedCurrencies"
+        android:text="GTPLUS Memo:" />
+
+    <TextView
+        android:id="@+id/gtPlusMemoValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="GTPLUS5d4ghfzijxa9uunq" />
+
+    <ImageButton
+        android:id="@+id/gtPlusMemoCopy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/gtPlusMemo"
+        app:layout_constraintBottom_toTopOf="@+id/gtPlusMemoValue"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:background="@color/background"
+        android:src="@drawable/content_copy" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

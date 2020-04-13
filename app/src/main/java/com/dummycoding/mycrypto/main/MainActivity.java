@@ -23,6 +23,7 @@ import com.dummycoding.mycrypto.adapters.BitBlinxMainAdapter;
 import com.dummycoding.mycrypto.adapters.BitBlinxMainAdapterCallback;
 import com.dummycoding.mycrypto.adapters.OwnedTokensAdapter;
 import com.dummycoding.mycrypto.adapters.OwnedTokensAdapterCallback;
+import com.dummycoding.mycrypto.dev.DevActivity;
 import com.dummycoding.mycrypto.helpers.CurrencyHelper;
 import com.dummycoding.mycrypto.models.CombinedResultWrapper;
 import com.dummycoding.mycrypto.models.OwnedToken;
@@ -205,11 +206,11 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener,
                     getCompositionRoot().getRepository().setBtcValueForPreferredCurrency(resultWrapper.getBpi().getRateFloat());
                     getCompositionRoot().getRepository().storeLatestBitBlinxData(resultWrapper.getResult())
                             .subscribeOn(Schedulers.io())
-                            .subscribe();
+                            .subscribe(() -> {}, throwable -> Timber.e(throwable, "getLatestData: "));
                     if (getCompositionRoot().getRepository().getShowOwnedTokens()) {
                         updateOwnedTokensRates(resultWrapper);
                     }
-                }, throwable -> Timber.e(throwable, "onRefresh: "));
+                }, throwable -> Timber.e(throwable, "getLatestData: "));
     }
 
     @SuppressLint("CheckResult")
@@ -227,7 +228,7 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener,
                     if (index != -1) {
                         ownedToken.setTokenInBtc(Double.parseDouble(results.get(index).getLast()));
                         getCompositionRoot().getRepository().storeOwnedToken(ownedToken)
-                                .subscribe();
+                                .subscribe(() -> {}, throwable -> Timber.e(throwable, "updateOwnedTokensRates: "));
                     }
                     return ownedToken;
                 })
@@ -265,6 +266,13 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener,
     }
 
     @Override
+    public void onInfoFabPressed() {
+        Intent intent = new Intent(this, DevActivity.class);
+        startActivity(intent);
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
     public void setFavorite(Result result) {
         List<String> favorites = getCompositionRoot().getRepository().getFavorites();
         if (favorites.contains(result.getSymbol())) {
@@ -275,7 +283,7 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener,
         getCompositionRoot().getRepository().setFavorites(favorites);
         getCompositionRoot().getRepository().updateBitBlinxResult(result)
                 .subscribeOn(Schedulers.io())
-                .subscribe();
+                .subscribe(() -> {}, throwable -> Timber.e(throwable, "setFavorite: "));
     }
 
     @Override
@@ -326,7 +334,7 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener,
         if (ownedToken.getToken() != null) {
             builder.setNegativeButton("Delete", (dialog, id) -> getCompositionRoot().getRepository().deleteOwnedToken(ownedToken)
                     .subscribeOn(Schedulers.io())
-                    .subscribe());
+                    .subscribe(() -> {}, throwable -> Timber.e(throwable, "createEditOwnedTokenDialog: ")));
         }
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
@@ -340,7 +348,7 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener,
             ownedToken.setTokenInBtc(getCompositionRoot().getRepository().getBtcValueForPreferredCurrency());
             getCompositionRoot().getRepository().storeOwnedToken(ownedToken)
                     .subscribeOn(Schedulers.io())
-                    .subscribe();
+                    .subscribe(() -> {}, throwable -> Timber.e(throwable, "editOwnedToken: "));
         } else {
             getCompositionRoot().getRepository().getTokenBySymbol(ownedToken.getToken() + "/BTC")
                     .map(result -> result.get(0))
@@ -348,7 +356,7 @@ public class MainActivity extends BaseActivity implements MainViewMvc.Listener,
                     .subscribe(token -> {
                         ownedToken.setTokenInBtc(Double.parseDouble(token.getLast()));
                         getCompositionRoot().getRepository().storeOwnedToken(ownedToken).subscribe();
-                    }, throwable -> Timber.e(throwable, "sendDialogDataToActivity: "));
+                    }, throwable -> Timber.e(throwable, "editOwnedToken: "));
         }
 
     }

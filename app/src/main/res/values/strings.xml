@@ -6,4 +6,7 @@
     <string name="chosen_currency">%1$s %2$s</string>
     <string name="chosen_currency_value">%1$S %2$s</string>
 
+    <string name="powered_by_coindesk"><a href="https://www.coindesk.com/price/bitcoin">Powered by CoinDesk</a></string>
+    <string name="powered_by_bitblinx"><a href="https://trade.bitblinx.com/sessions/signup/yK1-Meq4r">BitBlinx</a></string>
+
 </resources>

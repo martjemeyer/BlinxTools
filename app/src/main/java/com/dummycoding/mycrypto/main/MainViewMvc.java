@@ -8,15 +8,21 @@ import com.dummycoding.mycrypto.common.mvcviews.ObservableViewMvc;
 
 public interface MainViewMvc extends ObservableViewMvc<MainViewMvc.Listener> {
 
-    interface Listener {
-        void fabClicked();
-    }
-
     void setPairsRecyclerViewAdapter(BitBlinxMainAdapter adapter);
+
     void setOwnedTokensRecyclerViewAdapter(OwnedTokensAdapter adapter);
 
     void showProgressBar(boolean show);
+
     void updateCurrentValueBtc(String value, String currency);
+
     void showOwnedTokens(boolean show);
+
     Toolbar getToolbar();
+
+    interface Listener {
+        void fabClicked();
+
+        void onInfoFabPressed();
+    }
 }

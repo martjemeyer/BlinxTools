@@ -1,6 +1,7 @@
 package com.dummycoding.mycrypto;
 
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -30,17 +31,22 @@ public class MyCrypto extends Application {
         mCompositionRoot = new CompositionRoot(this);
 
         if (mCompositionRoot.getRepository().isFirstLaunched()) {
-            mCompositionRoot.getRepository().setFirstLaunched();
-
-            OwnedToken gtfta = new OwnedToken("GTFTA", 10000);
-            OwnedToken gtplus = new OwnedToken("GTPLUS", 21000);
-            OwnedToken gtplus2 = new OwnedToken("GTPLUS", 500);
-            OwnedToken btc = new OwnedToken("BTC", 1.2);
-
-            mCompositionRoot.getRepository().insertOwnedTokens(gtfta, gtplus, gtplus2, btc)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe();
+           createFirstLaunchData();
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private void createFirstLaunchData() {
+        mCompositionRoot.getRepository().setFirstLaunched();
+
+        OwnedToken gtfta = new OwnedToken("GTFTA", 10000);
+        OwnedToken gtplus = new OwnedToken("GTPLUS", 21000);
+        OwnedToken gtplus2 = new OwnedToken("GTPLUS", 500);
+        OwnedToken btc = new OwnedToken("BTC", 1.2);
+
+        mCompositionRoot.getRepository().insertOwnedTokens(gtfta, gtplus, gtplus2, btc)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {}, throwable -> Timber.e(throwable, "editOwnedToken: "));
     }
 
     public CompositionRoot getCompositionRoot() {
