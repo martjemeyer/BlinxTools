@@ -1,4 +1,5 @@
 <resources>
+    <string name="fist_launch_key">fist_launch_key</string>
     <string name="owned_currency_key">owned_currency_key</string>
     <string name="amount_owned_tokens_key">amount_owned_tokens_key</string>
     <string name="token_list_key">token_list_key</string>

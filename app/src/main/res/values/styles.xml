@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:colorAccent">@color/primary</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="OwnedCurrencies" parent="AppTheme">

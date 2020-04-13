@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BlinxTools</string>
+    <string name="app_name">MyCrypto</string>
     <string name="title_activity_settings">Settings</string>
     <string name="bitcoin_logo">Bitcoin logo</string>
     <string name="current_btc_price">Current BTC price = %1$s %2$s</string>
