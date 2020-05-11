@@ -12,16 +12,14 @@ import com.dummycoding.mycrypto.R;
 import com.dummycoding.mycrypto.adapters.BitBlinxMainAdapter;
 import com.dummycoding.mycrypto.adapters.OwnedTokensAdapter;
 import com.dummycoding.mycrypto.common.mvcviews.BaseViewMvc;
-import com.dummycoding.mycrypto.databinding.ActivityMainBinding;
 
-public class MainViewMvcImpl extends BaseViewMvc<MainViewMvc.Listener> implements MainViewMvc {
+public class MainViewMvcImpl {//extends BaseViewMvc<MainViewMvc.Listener> implements MainViewMvc {
 
-    private final Listener mListener;
-    private ActivityMainBinding view;
+    //private final Listener mListener;
 
-    MainViewMvcImpl(LayoutInflater inflater, Listener listener, Context context) {
+    MainViewMvcImpl(LayoutInflater inflater, MainViewMvc.Listener listener, Context context) {
 
-        view = ActivityMainBinding.inflate(inflater);
+/*        view = com.dummycoding.mycrypto.databinding.ActivityMainBinding.inflate(inflater);
         setRootView(view.getRoot());
 
         view.pairsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -30,12 +28,12 @@ public class MainViewMvcImpl extends BaseViewMvc<MainViewMvc.Listener> implement
         view.fab.setOnClickListener(v -> editOwnedCurrency());
         view.poweredByCoinDesk.setOnClickListener(v -> coinDeskHyperLinkPressed());
         view.poweredByBitBlinx.setOnClickListener(v -> bitBlinxHyperLinkPressed());
-        view.infoFab.setOnClickListener(v -> onInfoFabPressed());
+        view.infoFab.setOnClickListener(v -> onInfoFabPressed());*/
 
-        mListener = listener;
+        //mListener = listener;
     }
 
-    private void onInfoFabPressed() {
+ /*   private void onInfoFabPressed() {
         mListener.onInfoFabPressed();
     }
 
@@ -81,6 +79,6 @@ public class MainViewMvcImpl extends BaseViewMvc<MainViewMvc.Listener> implement
     @Override
     public Toolbar getToolbar() {
         return view.toolbar;
-    }
+    }*/
 
 }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dummycoding.mycrypto.R;
 import com.dummycoding.mycrypto.main.MainActivity;
+import com.dummycoding.mycrypto.main.MainActivityOld;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -35,7 +35,7 @@ public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.
     @NonNull
     @Override
     public OwnedTokensHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.owned_currency_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.owned_token_item, parent, false);
         return new OwnedTokensHolder(view);
     }
 
@@ -43,8 +43,6 @@ public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.
     public void onBindViewHolder(@NonNull OwnedTokensHolder holder, int position) {
         OwnedToken ownedToken = mOwnedTokens.get(position);
         holder.setDetails(ownedToken);
-
-        holder.editTokenButton.setOnClickListener(v -> handleEditButtonClicked(position));
     }
 
     private void handleEditButtonClicked(int position) {
@@ -70,14 +68,12 @@ public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.
 
     class OwnedTokensHolder extends RecyclerView.ViewHolder {
 
-        private ImageButton editTokenButton;
         private TextView token;
         private TextView tokenValue;
 
         OwnedTokensHolder(@NonNull View itemView) {
             super(itemView);
 
-            editTokenButton = itemView.findViewById(R.id.removeTokenButton);
             token = itemView.findViewById(R.id.chosenToken);
             tokenValue = itemView.findViewById(R.id.chosenTokenValue);
         }

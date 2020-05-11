@@ -13,7 +13,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.dummycoding.mycrypto.BaseActivity;
+import com.dummycoding.mycrypto.common.BaseActivity;
 import com.dummycoding.mycrypto.R;
 import com.dummycoding.mycrypto.data.network.Repository;
 import com.dummycoding.mycrypto.models.coindesk.CurrencyCountryWrapper;
@@ -29,7 +29,7 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
+        setContentView(R.layout.activity_settings);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.settings, new SettingsFragment())

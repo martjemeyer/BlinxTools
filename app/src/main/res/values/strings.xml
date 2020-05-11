@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">MyCrypto</string>
+    <string-array name="fragments">
+        <item>Markets</item>
+        <item>Owned Currencies</item>
+    </string-array>
+
+    <string name="app_name">My Crypto</string>
     <string name="title_activity_settings">Settings</string>
     <string name="bitcoin_logo">Bitcoin logo</string>
     <string name="current_btc_price">Current BTC price = %1$s %2$s</string>
@@ -9,4 +14,7 @@
     <string name="powered_by_coindesk"><a href="https://www.coindesk.com/price/bitcoin">Powered by CoinDesk</a></string>
     <string name="powered_by_bitblinx"><a href="https://trade.bitblinx.com/sessions/signup/yK1-Meq4r">BitBlinx</a></string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
