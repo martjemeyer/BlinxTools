@@ -33,6 +33,6 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineVerticalStart"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalEnd"
         app:layout_constraintDimensionRatio="H,1:1"
-        app:srcCompat="@drawable/splash_full_name"  />
+        app:srcCompat="@drawable/splash"  />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
