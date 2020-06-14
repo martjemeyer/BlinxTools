@@ -6,4 +6,6 @@ public interface BitBlinxMainAdapterCallback {
     void setFavorite(Result result);
 
     void handleLongClicked(Result result);
+
+    void notifyDoubleTapToFavorite();
 }

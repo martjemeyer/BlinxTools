@@ -3,6 +3,7 @@ package com.dummycoding.mycrypto.adapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +30,32 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
     private BitBlinxMainAdapterCallback mActivityCallBack;
     private SharedPreferences mSharedPreferences;
     private boolean mShow24HighLow;
+    private CountDownTimer mCountDownTimer;
+    private int mRowClicked = -1;
+
+    public int test = 21;
 
     public BitBlinxMainAdapter(Context context, List<Result> pairs, BitBlinxMainAdapterCallback callBack) {
         mContext = context;
         mPairs = pairs;
         mActivityCallBack = callBack;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        initCountDownTimer();
+    }
+
+    private void initCountDownTimer() {
+        mCountDownTimer = new CountDownTimer(1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // can be ignored
+            }
+
+            @Override
+            public void onFinish() {
+                // invalidate last clicked row
+                mRowClicked = -1;
+            }
+        };
     }
 
     @NonNull
@@ -59,9 +80,17 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
     }
 
     private void handleOnCardClicked(int position) {
-        Result result = mPairs.get(position);
-        result.setFavorited(!result.isFavorited());
-        mActivityCallBack.setFavorite(result);
+        mCountDownTimer.cancel();
+        if (mRowClicked == position) {
+            mRowClicked = -1;
+            Result result = mPairs.get(position);
+            result.setFavorited(!result.isFavorited());
+            mActivityCallBack.setFavorite(result);
+        } else {
+            mRowClicked = position;
+            mActivityCallBack.notifyDoubleTapToFavorite();
+        }
+        mCountDownTimer.start();
     }
 
     @Override
@@ -108,7 +137,7 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
             boolean negativeChange = result.getPriceChange().contains("-");
             int gainColor = ContextCompat.getColor(mContext, negativeChange ? R.color.error : R.color.green);
 
-            cardView.setStrokeColor(gainColor);
+            //cardView.setStrokeColor(gainColor);
             gainIcon.setImageResource(negativeChange ? R.drawable.menu_down : R.drawable.menu_up);
             ImageViewCompat.setImageTintList(gainIcon, ColorStateList.valueOf(gainColor));
             gainText.setText(result.getPriceChange() + "%");

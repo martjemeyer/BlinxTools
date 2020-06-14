@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.viewbinding.BuildConfig;
 
 import com.dummycoding.mycrypto.di.CompositionRoot;
 import com.dummycoding.mycrypto.models.OwnedToken;
@@ -22,12 +21,10 @@ public class MyCrypto extends Application {
     public void onCreate() {
         super.onCreate();
 
+        Timber.plant(new Timber.DebugTree());
+
         AppCompatDelegate.setDefaultNightMode(
                 AppCompatDelegate.MODE_NIGHT_YES);
-
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
 
         mCompositionRoot = new CompositionRoot(this);
 
@@ -44,7 +41,7 @@ public class MyCrypto extends Application {
         OwnedToken gtplus = new OwnedToken("GTPLUS", 21000);
         OwnedToken gtplus2 = new OwnedToken("GTPLUS", 500);
 
-        mCompositionRoot.getRepository().insertOwnedTokens(gtfta, gtplus, gtplus2, btc)
+        mCompositionRoot.getRepository().insertOwnedTokens(gtfta, gtplus, gtplus2)
                 .subscribeOn(Schedulers.io())
                 .subscribe(() -> {}, throwable -> Timber.e(throwable, "editOwnedToken: "));
     }

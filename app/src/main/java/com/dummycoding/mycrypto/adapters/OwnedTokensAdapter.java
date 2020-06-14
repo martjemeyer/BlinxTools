@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,10 +25,9 @@ public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.
     private double mBtcInCurrency = -1;
     private String mPreferredCurrency = "";
 
-    public OwnedTokensAdapter(Context context, List<OwnedToken> ownedTokens, OwnedTokensAdapterCallback callBack) {
+    public OwnedTokensAdapter(Context context, List<OwnedToken> ownedTokens) {
         mContext = context;
         mOwnedTokens = ownedTokens;
-        mActivityCallBack = callBack;
     }
 
     @NonNull
@@ -43,10 +41,6 @@ public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.
     public void onBindViewHolder(@NonNull OwnedTokensHolder holder, int position) {
         OwnedToken ownedToken = mOwnedTokens.get(position);
         holder.setDetails(ownedToken);
-    }
-
-    private void handleEditButtonClicked(int position) {
-        mActivityCallBack.updateOwnedToken(mOwnedTokens.get(position));
     }
 
     @Override

@@ -42,6 +42,9 @@ public class Result implements Serializable {
 
     private boolean favorited = false;
 
+    @Ignore
+    private boolean singlePressed = false;
+
     public Result() {
     }
 

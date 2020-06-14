@@ -9,4 +9,9 @@
     <dimen name="appbar_padding">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+
+    <dimen name="calculator_button_size">64dp</dimen>
+    <dimen name="calculator_button_radius">32dp</dimen>
+    <dimen name="calculator_space_between_container_size">16dp</dimen>
+    <dimen name="calculator_space_between_button_size">8dp</dimen>
 </resources>

@@ -2,7 +2,6 @@ package com.dummycoding.mycrypto.main;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,12 +9,11 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.dummycoding.mycrypto.common.BaseActivity;
 import com.dummycoding.mycrypto.R;
 import com.dummycoding.mycrypto.adapters.BitBlinxMainAdapter;
-import com.dummycoding.mycrypto.adapters.BitBlinxMainAdapterCallback;
 import com.dummycoding.mycrypto.adapters.OwnedTokensAdapter;
 import com.dummycoding.mycrypto.adapters.OwnedTokensAdapterCallback;
+import com.dummycoding.mycrypto.common.BaseActivity;
 import com.dummycoding.mycrypto.helpers.CurrencyHelper;
 import com.dummycoding.mycrypto.models.CombinedResultWrapper;
 import com.dummycoding.mycrypto.models.OwnedToken;
@@ -39,7 +37,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainActivityOld extends BaseActivity implements MainViewMvc.Listener,
-        OwnedTokensAdapterCallback, BitBlinxMainAdapterCallback, SwipeRefreshLayout.OnRefreshListener {
+        OwnedTokensAdapterCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private MainViewMvc mViewMvc;
     private BitBlinxMainAdapter mBitBlinxMainAdapter;
@@ -263,27 +261,6 @@ public class MainActivityOld extends BaseActivity implements MainViewMvc.Listene
         startActivity(intent);*/
     }
 
-    @SuppressLint("CheckResult")
-    @Override
-    public void setFavorite(Result result) {
-        List<String> favorites = getCompositionRoot().getRepository().getFavorites();
-        if (favorites.contains(result.getSymbol())) {
-            favorites.remove(result.getSymbol());
-        } else {
-            favorites.add(result.getSymbol());
-        }
-        getCompositionRoot().getRepository().setFavorites(favorites);
-        getCompositionRoot().getRepository().updateBitBlinxResult(result)
-                .subscribeOn(Schedulers.io())
-                .subscribe(() -> {}, throwable -> Timber.e(throwable, "setFavorite: "));
-    }
-
-    @Override
-    public void handleLongClicked(Result result) {
-        String pair = result.getSymbol().replace("/", "-");;
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://trade.bitblinx.com/sessions/market-view?symbol=" + pair));
-        startActivity(intent);
-    }
 
     private void createEditOwnedTokenDialog(List<String> tokens, OwnedToken ownedToken) {
         // create an alert builder

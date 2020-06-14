@@ -1,41 +1,37 @@
 package com.dummycoding.mycrypto.markets;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dummycoding.mycrypto.R;
 import com.dummycoding.mycrypto.adapters.BitBlinxMainAdapter;
 import com.dummycoding.mycrypto.adapters.BitBlinxMainAdapterCallback;
 import com.dummycoding.mycrypto.adapters.OwnedTokensAdapter;
-import com.dummycoding.mycrypto.adapters.OwnedTokensAdapterCallback;
+import com.dummycoding.mycrypto.calculator.CalculatorActivity;
 import com.dummycoding.mycrypto.common.BaseFragment;
 import com.dummycoding.mycrypto.databinding.FragmentMarketsBinding;
 import com.dummycoding.mycrypto.helpers.CurrencyHelper;
-import com.dummycoding.mycrypto.main.MainViewMvc;
 import com.dummycoding.mycrypto.models.CombinedResultWrapper;
 import com.dummycoding.mycrypto.models.OwnedToken;
 import com.dummycoding.mycrypto.models.bitblinx.ActiveCurrencies;
 import com.dummycoding.mycrypto.models.bitblinx.Result;
 import com.dummycoding.mycrypto.models.coindesk.BpiCurrency;
 import com.dummycoding.mycrypto.models.coindesk.CurrentPrice;
-import com.dummycoding.mycrypto.preferences.SettingsActivity;
 import com.dummycoding.mycrypto.usecases.FetchActiveTokenPairsUseCase;
 import com.dummycoding.mycrypto.usecases.FetchAvailableCurrenciesUseCase;
 import com.dummycoding.mycrypto.usecases.FetchPricesUseCase;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +44,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class MarketsFragment extends BaseFragment implements OwnedTokensAdapterCallback,
-        BitBlinxMainAdapterCallback, SwipeRefreshLayout.OnRefreshListener{
+public class MarketsFragment extends BaseFragment implements BitBlinxMainAdapterCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private FragmentMarketsBinding binding;
     private MarketsViewModel mViewModel;
@@ -63,6 +58,9 @@ public class MarketsFragment extends BaseFragment implements OwnedTokensAdapterC
     private FetchAvailableCurrenciesUseCase mFetchAvailableCurrenciesUseCase;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private boolean matchConstraintAlreadySet = false;
+    private boolean wrapContentAlreadySet = false;
+
 
     public static MarketsFragment newInstance() {
         return new MarketsFragment();
@@ -72,9 +70,6 @@ public class MarketsFragment extends BaseFragment implements OwnedTokensAdapterC
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentMarketsBinding.inflate(inflater, container, false);
-
-        binding.pairsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.ownedTokensRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //binding.fab.setOnClickListener(v -> editOwnedCurrency());
 
@@ -89,16 +84,25 @@ public class MarketsFragment extends BaseFragment implements OwnedTokensAdapterC
 
         setupRecyclerViews();
 
+        binding.infoFab.setOnClickListener(v -> fabClicked());
+
         // only once per app live time, since this list is not likely to update often.
         // maybe make it once per app installation
         updateFiatCurrencies();
 
+        fabClicked();
+
         return binding.getRoot();
+    }
+
+    private void fabClicked() {
+        Intent intent = new Intent(getActivity(), CalculatorActivity.class);
+        startActivity(intent);
     }
 
     private void setupRecyclerViews() {
         mBitBlinxMainAdapter = new BitBlinxMainAdapter(getContext(), new ArrayList<>(), this);
-        mOwnedTokensAdapter = new OwnedTokensAdapter(getContext(), new ArrayList<>(), this);
+        mOwnedTokensAdapter = new OwnedTokensAdapter(getContext(), new ArrayList<>());
 
         binding.pairsRecyclerView.setAdapter(mBitBlinxMainAdapter);
         binding.ownedTokensRecyclerView.setAdapter(mOwnedTokensAdapter);
@@ -111,7 +115,6 @@ public class MarketsFragment extends BaseFragment implements OwnedTokensAdapterC
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(MarketsViewModel.class);
-
     }
 
     @Override
@@ -231,7 +234,8 @@ public class MarketsFragment extends BaseFragment implements OwnedTokensAdapterC
                     getCompositionRoot().getRepository().setBtcValueForPreferredCurrency(resultWrapper.getBpi().getRateFloat());
                     getCompositionRoot().getRepository().storeLatestBitBlinxData(resultWrapper.getResult())
                             .subscribeOn(Schedulers.io())
-                            .subscribe(() -> {}, throwable -> Timber.e(throwable, "getLatestData: "));
+                            .subscribe(() -> {
+                            }, throwable -> Timber.e(throwable, "getLatestData: "));
                     if (getCompositionRoot().getRepository().getShowOwnedTokens()) {
                         updateOwnedTokensRates(resultWrapper);
                     }
@@ -253,7 +257,8 @@ public class MarketsFragment extends BaseFragment implements OwnedTokensAdapterC
                     if (index != -1) {
                         ownedToken.setTokenInBtc(Double.parseDouble(results.get(index).getLast()));
                         getCompositionRoot().getRepository().storeOwnedToken(ownedToken)
-                                .subscribe(() -> {}, throwable -> Timber.e(throwable, "updateOwnedTokensRates: "));
+                                .subscribe(() -> {
+                                }, throwable -> Timber.e(throwable, "updateOwnedTokensRates: "));
                     }
                     return ownedToken;
                 })
@@ -267,27 +272,6 @@ public class MarketsFragment extends BaseFragment implements OwnedTokensAdapterC
     }
 
     @SuppressLint("CheckResult")
-    public void updateOwnedToken(OwnedToken ownedToken) {
-        getCompositionRoot().getRepository().getAllBtcPairs()
-                .toFlowable()
-                .flatMapIterable(result -> result)
-                .map(result -> result.substring(0, result.indexOf("/")))
-                .toList()
-                .map(result -> {
-                    result.add(0, "BTC");
-                    return result;
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(tokens -> createEditOwnedTokenDialog(tokens, ownedToken), throwable -> Timber.e(throwable, "fabClicked: "));
-    }
-
-    @SuppressLint("CheckResult")
-    public void fabClicked() {
-        updateOwnedToken(new OwnedToken());
-    }
-
-    @SuppressLint("CheckResult")
     public void setFavorite(Result result) {
         List<String> favorites = getCompositionRoot().getRepository().getFavorites();
         if (favorites.contains(result.getSymbol())) {
@@ -298,83 +282,33 @@ public class MarketsFragment extends BaseFragment implements OwnedTokensAdapterC
         getCompositionRoot().getRepository().setFavorites(favorites);
         getCompositionRoot().getRepository().updateBitBlinxResult(result)
                 .subscribeOn(Schedulers.io())
-                .subscribe(() -> {}, throwable -> Timber.e(throwable, "setFavorite: "));
+                .subscribe(() -> {
+                }, throwable -> Timber.e(throwable, "setFavorite: "));
     }
 
     @Override
     public void handleLongClicked(Result result) {
-        String pair = result.getSymbol().replace("/", "-");;
+        String pair = result.getSymbol().replace("/", "-");
+        ;
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://trade.bitblinx.com/sessions/market-view?symbol=" + pair));
         startActivity(intent);
     }
 
-    private void createEditOwnedTokenDialog(List<String> tokens, OwnedToken ownedToken) {
-        // create an alert builder
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Token");
-        // set the custom layout
-        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_owned_tokens, null);
-        builder.setView(customLayout);
-
-        Spinner spinner = customLayout.findViewById(R.id.dropdown);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, tokens);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        EditText editText = customLayout.findViewById(R.id.amount);
-
-        if (ownedToken.getId() >= 0) {
-            NumberFormat nf = new DecimalFormat("##.###");
-            int index = tokens.indexOf(ownedToken.getToken());
-            editText.setText(nf.format(ownedToken.getTokenAmount()));
-            spinner.setSelection(index);
+    @Override
+    public void notifyDoubleTapToFavorite() {
+        if (getCompositionRoot().getRepository().isDoubleClickHintHidden()) {
+            return;
         }
-
-        // add a button
-        builder.setPositiveButton("Ok", (dialog, id) -> {
-            try {
-                ownedToken.setToken(spinner.getSelectedItem().toString());
-                ownedToken.setTokenAmount(Double.parseDouble(editText.getText().toString()));
-                editOwnedToken(ownedToken);
-            } catch (Exception ex) {
-                Timber.e(ex.getMessage(), "createEditOwnedTokenDialog: ");
-            }
-        });
-
-        builder.setNegativeButton("Cancel", (dialog, id) -> {
-            // do nothing
-        });
-
-        if (ownedToken.getToken() != null) {
-            builder.setNegativeButton("Delete", (dialog, id) -> getCompositionRoot().getRepository().deleteOwnedToken(ownedToken)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(() -> {}, throwable -> Timber.e(throwable, "createEditOwnedTokenDialog: ")));
-        }
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();*/
+        Snackbar snackbar = Snackbar.make(binding.getRoot(), "Tap again to (un)favorite", Snackbar.LENGTH_LONG);
+        snackbar.setAction("Don't show again", new HideSnackBarListener());
+        snackbar.show();
     }
 
-    @SuppressLint("CheckResult")
-    private void editOwnedToken(OwnedToken ownedToken) {
+    private class HideSnackBarListener implements View.OnClickListener {
 
-        if (ownedToken.getToken().equals("BTC")) {
-            ownedToken.setTokenInBtc(getCompositionRoot().getRepository().getBtcValueForPreferredCurrency());
-            getCompositionRoot().getRepository().storeOwnedToken(ownedToken)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(() -> {}, throwable -> Timber.e(throwable, "editOwnedToken: "));
-        } else {
-            getCompositionRoot().getRepository().getTokenBySymbol(ownedToken.getToken() + "/BTC")
-                    .map(result -> result.get(0))
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(token -> {
-                        ownedToken.setTokenInBtc(Double.parseDouble(token.getLast()));
-                        getCompositionRoot().getRepository().storeOwnedToken(ownedToken).subscribe();
-                    }, throwable -> Timber.e(throwable, "editOwnedToken: "));
+        @Override
+        public void onClick(View v) {
+            getCompositionRoot().getRepository().setHideDoubleClickHint();
         }
-
     }
-
-    
 }

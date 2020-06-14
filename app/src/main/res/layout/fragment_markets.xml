@@ -17,37 +17,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/bitcoinImage"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:contentDescription="@string/bitcoin_logo"
-                android:src="@drawable/bitcoin"
-                app:layout_constraintEnd_toStartOf="@+id/currentValueBtcDetailTv"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/currentValueBtcDetailTv"
-                style="@style/ValuesDetailsBtc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/current_btc_price"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/bitcoinImage"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/bitcoinImage"
-                app:layout_constraintTop_toTopOf="@+id/bitcoinImage"
-                tools:text="Current BTC price = 9999 EUR"
-                tools:visibility="visible" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ownedTokensContainer"
@@ -55,7 +27,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bitcoinImage"
+                app:layout_constraintTop_toTopOf="parent"
                 android:paddingBottom="4dp">
 
                 <TextView
@@ -94,10 +66,12 @@
         android:id="@+id/swipeContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bitcoinImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ownedCurrenciesCard">
+        app:layout_constraintTop_toBottomOf="@id/ownedCurrenciesCard"
+        android:layout_marginBottom="8dp"
+        >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pairsRecyclerView"
@@ -107,19 +81,47 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:itemCount="2"
             tools:listitem="@layout/list_item" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/bitcoinImage"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/bitcoin_logo"
+        android:src="@drawable/bitcoin"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+         />
+
+    <TextView
+        android:id="@+id/currentValueBtcDetailTv"
+        style="@style/ValuesDetailsBtc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/current_btc_price"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/bitcoinImage"
+        app:layout_constraintStart_toEndOf="@+id/bitcoinImage"
+        app:layout_constraintTop_toTopOf="@+id/bitcoinImage"
+        tools:text="Current BTC price = 9999 EUR"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/infoFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="16dp"
-        android:src="@drawable/developer_board" />
+        app:layout_constraintTop_toBottomOf="@+id/swipeContainer"
+        app:layout_constraintBottom_toTopOf="@+id/bitcoinImage"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/calculator" />
 
     <ProgressBar
         android:id="@+id/progress"

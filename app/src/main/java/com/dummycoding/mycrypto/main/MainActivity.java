@@ -2,18 +2,17 @@ package com.dummycoding.mycrypto.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.dummycoding.mycrypto.R;
 import com.dummycoding.mycrypto.databinding.ActivityMainBinding;
 import com.dummycoding.mycrypto.preferences.SettingsActivity;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.text.method.LinkMovementMethod;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 

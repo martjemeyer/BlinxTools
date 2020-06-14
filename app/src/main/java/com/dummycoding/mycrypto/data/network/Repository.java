@@ -15,6 +15,10 @@ public interface Repository {
     // Shared preferences
     void setFirstLaunched();
 
+    void setHideDoubleClickHint();
+
+    boolean isDoubleClickHintHidden();
+
     boolean isFirstLaunched();
 
     String getPreferredCurrency();

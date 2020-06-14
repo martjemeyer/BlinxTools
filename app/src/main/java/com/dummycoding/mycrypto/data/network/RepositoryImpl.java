@@ -50,6 +50,18 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public void setHideDoubleClickHint() {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(mContext.getString(R.string.hide_double_click_key), true);
+        editor.apply();
+    }
+
+    @Override
+    public boolean isDoubleClickHintHidden() {
+        return mPreferences.getBoolean(mContext.getString(R.string.hide_double_click_key), false);
+    }
+
+    @Override
     public String getPreferredCurrency() {
         return mPreferences.getString(mContext.getString(R.string.preferred_currency_key), "EUR");
     }
