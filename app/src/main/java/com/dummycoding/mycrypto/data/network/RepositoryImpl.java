@@ -164,6 +164,11 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public Single<List<Result>> getAllBtcPairsComplete() {
+        return mDatabase.blinxResultDao().getAllBtcPairsComplete();
+    }
+
+    @Override
     public Single<List<Result>> getTokenBySymbol(String symbol) {
         return mDatabase.blinxResultDao().getTokenBySymbol(symbol);
     }

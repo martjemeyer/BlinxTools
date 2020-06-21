@@ -18,13 +18,12 @@
         app:title="Calculator"
         android:elevation="4dp"/>
 
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.35" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top"
@@ -36,60 +35,105 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/input"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/topInput"
             style="@style/Pair"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:background="@drawable/soft_corners"
             android:backgroundTint="@color/grey_30"
             android:padding="8dp"
-            android:text="1.1234567"
+            tools:text="1.1234567"
+            android:text="0"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/output"
-            app:layout_constraintEnd_toStartOf="@+id/inputCurrency"
+            android:textIsSelectable="true"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toTopOf="@+id/middleInput"
+            app:layout_constraintEnd_toStartOf="@+id/topDropDown"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/inputCurrency"
-            style="@style/Pair"
+        <Spinner
+            android:id="@+id/topDropDown"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:padding="8dp"
-            android:text="BTC"
-            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/input"
-            app:layout_constraintTop_toTopOf="@+id/input" />
+            app:layout_constraintStart_toEndOf="@+id/topInput"
+            app:layout_constraintTop_toTopOf="@+id/topInput"
+            app:layout_constraintBottom_toBottomOf="@+id/topInput"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/white" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/output"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/middleInput"
             style="@style/Pair"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:padding="8dp"
-            android:text="1.1234567"
-            android:textColor="@color/white"
+            android:layout_marginTop="8dp"
             android:background="@drawable/soft_corners"
             android:backgroundTint="@color/grey_30"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/outputCurrency"
+            android:padding="8dp"
+            tools:text="1.1234567"
+            android:text="0"
+            android:textIsSelectable="true"
+            android:textColor="@color/white"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toTopOf="@id/bottomInput"
+            app:layout_constraintEnd_toStartOf="@+id/middleDropDown"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input" />
+            app:layout_constraintTop_toBottomOf="@+id/topInput" />
+
+        <Spinner
+            android:id="@+id/middleDropDown"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/middleInput"
+            app:layout_constraintTop_toTopOf="@+id/middleInput"
+            app:layout_constraintBottom_toBottomOf="@+id/middleInput"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/white" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/bottomInput"
+            style="@style/Pair"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/soft_corners"
+            android:backgroundTint="@color/grey_30"
+            android:padding="8dp"
+            tools:text="1.1234567"
+            android:text="0"
+            android:textIsSelectable="true"
+            android:textColor="@color/white"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:lines="1"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bottomInputDetail"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/middleInput" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/outputCurrency"
+            android:id="@+id/bottomInputDetail"
             style="@style/Pair"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -99,8 +143,8 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/output"
-            app:layout_constraintTop_toTopOf="@+id/output" />
+            app:layout_constraintStart_toEndOf="@+id/bottomInput"
+            app:layout_constraintTop_toTopOf="@+id/bottomInput" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -130,8 +174,10 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:textSize="32dp"
+                android:textColor="@color/onPrimary"
                 android:text="7"
+                android:background="@drawable/ripple"
                 app:layout_constraintBottom_toTopOf="@+id/button4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -145,7 +191,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="4"
                 app:layout_constraintBottom_toTopOf="@+id/button1"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -159,7 +205,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="1"
                 app:layout_constraintBottom_toTopOf="@+id/buttonDot"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -173,8 +219,9 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="."
+                android:backgroundTint="@color/secondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -200,7 +247,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="8"
                 app:layout_constraintBottom_toTopOf="@+id/button5"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -215,7 +262,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="5"
                 app:layout_constraintBottom_toTopOf="@+id/button2"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -229,7 +276,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="2"
                 app:layout_constraintBottom_toTopOf="@+id/button0"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -243,7 +290,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -270,7 +317,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="9"
                 app:layout_constraintBottom_toTopOf="@+id/button6"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -285,7 +332,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="6"
                 app:layout_constraintBottom_toTopOf="@+id/button3"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -299,7 +346,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:text="3"
                 app:layout_constraintBottom_toTopOf="@+id/buttonClear"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -313,7 +360,7 @@
                 style="@style/Calculator"
                 android:layout_width="@dimen/calculator_button_size"
                 android:layout_height="@dimen/calculator_button_size"
-                android:background="@drawable/roundbutton"
+                android:background="@drawable/ripple"
                 android:backgroundTint="@color/error"
                 android:text="C"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -326,5 +373,26 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/top"
+        app:layout_constraintBottom_toTopOf="@id/bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/top"
+        app:layout_constraintBottom_toTopOf="@id/bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/refresh" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -90,8 +90,6 @@ public class MarketsFragment extends BaseFragment implements BitBlinxMainAdapter
         // maybe make it once per app installation
         updateFiatCurrencies();
 
-        fabClicked();
-
         return binding.getRoot();
     }
 

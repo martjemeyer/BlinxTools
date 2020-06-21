@@ -29,6 +29,10 @@ public interface BlinxResultDao {
             "ORDER BY CASE WHEN symbol LIKE 'GT%' THEN 0 ELSE 1 END, symbol DESC")
     Single<List<String>> getAllBtcPairs();
 
+    @Query("SELECT * FROM Result WHERE symbol LIKE '%/BTC%' " +
+            "ORDER BY CASE WHEN symbol LIKE 'GT%' THEN 0 ELSE 1 END, symbol DESC")
+    Single<List<Result>> getAllBtcPairsComplete();
+
     @Query("SELECT * FROM Result WHERE symbol IN (:symbol)")
     Single<List<Result>> getTokenBySymbol(String symbol);
 

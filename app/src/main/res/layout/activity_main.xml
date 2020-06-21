@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        android:background="@color/onPrimary"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -20,8 +21,19 @@
             android:background="@color/toolbar_background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
-            app:title="My Crypto" />
+            android:layout_margin="8dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight">
+            <!--
+            <SearchView
+                android:id="@+id/searchView"
+                android:icon="@drawable/magnify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:iconifiedByDefault="true"
+                android:queryHint="Pair"/>
+            -->
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

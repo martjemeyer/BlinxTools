@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".calculator.CalculatorActivity"></activity>
+        <activity android:name=".calculator.CalculatorActivity"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
         <activity
             android:name=".main.MainActivity"
             android:label="@string/title_activity_main" />

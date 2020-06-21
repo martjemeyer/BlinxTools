@@ -48,6 +48,11 @@ public class Result implements Serializable {
     public Result() {
     }
 
+    public Result(@NonNull String symbol, String last) {
+        this.symbol = symbol;
+        this.last = last;
+    }
+
     @Ignore
     public Result(@NonNull String symbol) {
         this.symbol = symbol;

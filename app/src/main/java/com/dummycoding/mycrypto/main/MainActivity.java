@@ -14,6 +14,8 @@ import com.dummycoding.mycrypto.databinding.ActivityMainBinding;
 import com.dummycoding.mycrypto.preferences.SettingsActivity;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
@@ -32,10 +34,28 @@ public class MainActivity extends AppCompatActivity {
                 (tab, position) -> tab.setText(getResources().getStringArray(R.array.fragments)[position])).attach();
 
         setSupportActionBar(binding.toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("        My Crypto");
+        //Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setIcon(R.drawable.logo);
 
         binding.poweredByCoinDesk.setOnClickListener(v -> binding.poweredByCoinDesk.setMovementMethod(LinkMovementMethod.getInstance()));
         binding.poweredByBitBlinx.setOnClickListener(v -> binding.poweredByBitBlinx.setMovementMethod(LinkMovementMethod.getInstance()));
     }
+
+  /*  private void setupSearchViewListener() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Timber.d(newText);
+                return false;
+            }
+        });
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

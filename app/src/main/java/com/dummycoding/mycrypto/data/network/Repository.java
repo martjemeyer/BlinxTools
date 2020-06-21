@@ -64,6 +64,8 @@ public interface Repository {
 
     Single<List<String>> getAllBtcPairs();
 
+    Single<List<Result>> getAllBtcPairsComplete();
+
     Single<List<Result>> getTokenBySymbol(String symbol);
 
 

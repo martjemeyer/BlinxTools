@@ -56,9 +56,11 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
         binding.ownedTokensFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // SwipeRefreshLayout
+  /*
         mSwipeRefreshLayout = binding.swipeContainer;
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.primary);
+*/
 
         binding.addFab.setOnClickListener(c -> addButtonClicked());
 
@@ -189,6 +191,7 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
 
     @Override
     public void updateOwnedToken(OwnedToken ownedToken) {
+        disposeBag.add(
         getCompositionRoot().getRepository().getAllBtcPairs()
                 .toFlowable()
                 .flatMapIterable(result -> result)
@@ -200,7 +203,7 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(tokens -> createEditOwnedTokenDialog(tokens, ownedToken), throwable -> Timber.e(throwable, "fabClicked: "));
-
+                .subscribe(tokens -> createEditOwnedTokenDialog(tokens, ownedToken), throwable -> Timber.e(throwable, "fabClicked: "))
+        );
     }
 }

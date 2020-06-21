@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="0dp"
@@ -13,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" >
-
+-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ownedTokensFragmentRecyclerView"
             android:layout_width="0dp"
@@ -24,9 +25,9 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="2"
             tools:listitem="@layout/list_item_owned_token_fragment" />
-
+<!--
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addFab"
         android:layout_width="wrap_content"
