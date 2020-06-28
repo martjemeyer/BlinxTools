@@ -37,11 +37,10 @@ public class MyCrypto extends Application {
     private void createFirstLaunchData() {
         mCompositionRoot.getRepository().setFirstLaunched();
 
-        OwnedToken gtfta = new OwnedToken("GTFTA", 10000);
-        OwnedToken gtplus = new OwnedToken("GTPLUS", 21000);
+        OwnedToken gtfta = new OwnedToken("GTFTA", 100);
         OwnedToken gtplus2 = new OwnedToken("GTPLUS", 500);
 
-        mCompositionRoot.getRepository().insertOwnedTokens(gtfta, gtplus, gtplus2)
+        mCompositionRoot.getRepository().insertOwnedTokens(gtfta, gtplus2)
                 .subscribeOn(Schedulers.io())
                 .subscribe(() -> {}, throwable -> Timber.e(throwable, "editOwnedToken: "));
     }

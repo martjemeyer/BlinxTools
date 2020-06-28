@@ -21,7 +21,6 @@
             android:background="@color/toolbar_background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_margin="8dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight">
             <!--
             <SearchView
