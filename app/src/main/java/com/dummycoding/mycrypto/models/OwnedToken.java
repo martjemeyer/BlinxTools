@@ -11,14 +11,17 @@ public class OwnedToken {
     private String token;
     private double tokenAmount;
     private double tokenInBtc;
+    private int orderedIndex;
 
     public OwnedToken(String token, double tokenAmount) {
         this.token = token;
         this.tokenAmount = tokenAmount;
+        orderedIndex = 9999;
     }
 
     @Ignore
     public OwnedToken() {
+        orderedIndex = 9999;
     }
 
     public int getId() {
@@ -51,5 +54,13 @@ public class OwnedToken {
 
     public void setTokenInBtc(double tokenInBtc) {
         this.tokenInBtc = tokenInBtc;
+    }
+
+    public int getOrderedIndex() {
+        return orderedIndex;
+    }
+
+    public void setOrderedIndex(int orderedIndex) {
+        this.orderedIndex = orderedIndex;
     }
 }

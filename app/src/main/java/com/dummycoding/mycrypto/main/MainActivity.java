@@ -71,6 +71,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (binding.viewPager.getCurrentItem() == 0) {
+            super.onBackPressed();
+        }
+        else {
+            binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() - 1);
+        }
+    }
+
     private void openSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);

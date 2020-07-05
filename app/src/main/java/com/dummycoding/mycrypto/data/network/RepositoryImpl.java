@@ -134,6 +134,11 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public Completable insertOwnedTokens(List<OwnedToken> ownedTokens) {
+        return mDatabase.ownedTokenDao().insertOwnedTokens(ownedTokens);
+    }
+
+    @Override
     public Flowable<List<Result>> getBitBlinxDataFlowable() {
         return mDatabase.blinxResultDao().getAllResults();
     }
@@ -191,5 +196,10 @@ public class RepositoryImpl implements Repository {
     @Override
     public Completable updateBitBlinxResult(Result result) {
         return mDatabase.blinxResultDao().updateResult(result);
+    }
+
+    @Override
+    public Completable updateOwnedTokenPosition(int id, int price) {
+        return mDatabase.ownedTokenDao().update(id, price);
     }
 }

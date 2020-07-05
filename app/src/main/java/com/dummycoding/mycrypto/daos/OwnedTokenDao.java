@@ -22,11 +22,17 @@ public interface OwnedTokenDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertOwnedTokens(OwnedToken... tokens);
 
-    @Query("SELECT * FROM OwnedToken")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertOwnedTokens(List<OwnedToken> tokens);
+
+    @Query("SELECT * FROM OwnedToken ORDER BY orderedIndex")
     Flowable<List<OwnedToken>> getAllOwnedTokens();
 
-    @Query("SELECT * FROM OwnedToken")
+    @Query("SELECT * FROM OwnedToken ORDER BY orderedIndex")
     Single<List<OwnedToken>> getAllOwnedTokensSingle();
+
+    @Query("UPDATE OwnedToken SET orderedIndex=:price WHERE id = :id")
+    Completable update(int id, int price);
 
     @Delete
     Completable delete(OwnedToken ownedToken);

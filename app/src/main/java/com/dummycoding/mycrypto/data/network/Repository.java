@@ -48,9 +48,13 @@ public interface Repository {
 
     Completable insertOwnedTokens(OwnedToken... ownedTokens);
 
+    Completable insertOwnedTokens(List<OwnedToken> ownedTokens);
+
     Completable deleteOwnedToken(OwnedToken ownedToken);
 
     Completable updateBitBlinxResult(Result result);
+
+    Completable updateOwnedTokenPosition(int id, int position);
 
     Flowable<List<Result>> getBitBlinxDataFlowable();
 

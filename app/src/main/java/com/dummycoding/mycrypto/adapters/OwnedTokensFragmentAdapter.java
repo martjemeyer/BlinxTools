@@ -14,9 +14,10 @@ import com.dummycoding.mycrypto.models.OwnedToken;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.List;
 
-public class OwnedTokensFragmentAdapter extends RecyclerView.Adapter<OwnedTokensFragmentAdapter.OwnedTokensFragmentHolder> {
+public class OwnedTokensFragmentAdapter extends RecyclerView.Adapter<OwnedTokensFragmentAdapter.OwnedTokensFragmentHolder> implements ItemTouchHelperAdapter {
 
     private Context mContext;
     private List<OwnedToken> mOwnedTokens;
@@ -52,6 +53,33 @@ public class OwnedTokensFragmentAdapter extends RecyclerView.Adapter<OwnedTokens
     @Override
     public int getItemCount() {
         return mOwnedTokens.size();
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mOwnedTokens, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mOwnedTokens, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        //no do
+    }
+
+    @Override
+    public void onDragReleased() {
+        for (int i = 0; i < mOwnedTokens.size(); i++) {
+            mOwnedTokens.get(i).setOrderedIndex(i);
+        }
+        mCallback.updateOwnedTokensOrder(mOwnedTokens);
     }
 
     public void updateAdapter(List<OwnedToken> ownedTokens, double btcInCurrency, String preferredCurrency) {

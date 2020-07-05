@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -64,6 +65,10 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
         mOwnedTokensAdapter = new OwnedTokensFragmentAdapter(getContext(), new ArrayList<>(), this);
         binding.ownedTokensFragmentRecyclerView.setAdapter(mOwnedTokensAdapter);
         binding.ownedTokensFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mOwnedTokensAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(binding.ownedTokensFragmentRecyclerView);
 
         // SwipeRefreshLayout
         mSwipeRefreshLayout = binding.swipeContainer;
@@ -300,6 +305,16 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(tokens -> createEditOwnedTokenDialog(tokens, ownedToken), throwable -> Timber.e(throwable, "fabClicked: "))
+        );
+    }
+
+    @Override
+    public void updateOwnedTokensOrder(List<OwnedToken> ownedTokens) {
+        disposeBag.add(
+                getCompositionRoot().getRepository().insertOwnedTokens(ownedTokens)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe()
         );
     }
 }
