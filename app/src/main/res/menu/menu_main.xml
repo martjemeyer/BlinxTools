@@ -9,6 +9,6 @@
         android:orderInCategory="300"
         android:title="Settings"
         android:icon="@drawable/cog_outline"
-        app:iconTint="@color/white"
+        app:iconTint="@color/onSurface"
         app:showAsAction="ifRoom"/>
 </menu>

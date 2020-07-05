@@ -1,7 +1,7 @@
 <resources>
     <string-array name="fragments">
         <item>Markets</item>
-        <item>Owned Tokens</item>
+        <item>Portfolio</item>
     </string-array>
 
     <string name="app_name">My Crypto</string>

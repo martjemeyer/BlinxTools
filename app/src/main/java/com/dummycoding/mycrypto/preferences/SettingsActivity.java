@@ -1,6 +1,7 @@
 package com.dummycoding.mycrypto.preferences;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -10,11 +11,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.dummycoding.mycrypto.common.BaseActivity;
 import com.dummycoding.mycrypto.R;
+import com.dummycoding.mycrypto.common.BaseActivity;
 import com.dummycoding.mycrypto.data.network.Repository;
 import com.dummycoding.mycrypto.models.coindesk.CurrencyCountryWrapper;
 
@@ -51,7 +53,7 @@ public class SettingsActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
         private ListPreference mListPreference;
         private CompositeDisposable subscriptions = new CompositeDisposable();
         private Repository mRepository;
@@ -71,6 +73,7 @@ public class SettingsActivity extends BaseActivity {
                     return true;
                 });
             }
+
             return super.onCreateView(inflater, container, savedInstanceState);
         }
 
@@ -86,6 +89,7 @@ public class SettingsActivity extends BaseActivity {
         public void onStop() {
             super.onStop();
             subscriptions.clear();
+            getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         }
 
         @Override
@@ -94,6 +98,7 @@ public class SettingsActivity extends BaseActivity {
             if (mRepository != null) {
                 getListPreferencesFromDb();
             }
+            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         }
 
         private void getListPreferencesFromDb() {
@@ -130,6 +135,26 @@ public class SettingsActivity extends BaseActivity {
             mListPreference.setEntryValues(new CharSequence[]{"EUR"});
             mListPreference.setDefaultValue("EUR");
             mListPreference.setSummary("Euro");
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(getResources().getString(R.string.dark_mode_key))) {
+                boolean darkMode = sharedPreferences.getBoolean(key, true);
+                AppCompatDelegate.setDefaultNightMode(darkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+            }
+            if (key.equals(getResources().getString(R.string.follow_system_setting_key))) {
+                boolean darkMode = sharedPreferences.getBoolean(key, false);
+                if (darkMode) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    SettingsActivity activity = (SettingsActivity) getActivity();
+                    if (activity != null) {
+                        boolean darkModeSwitch = ((SettingsActivity) getActivity()).getCompositionRoot().getRepository().isDarkMode();
+                        AppCompatDelegate.setDefaultNightMode(darkModeSwitch ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+                    }
+                }
+            }
         }
     }
 }

@@ -23,10 +23,13 @@ public class MyCrypto extends Application {
 
         Timber.plant(new Timber.DebugTree());
 
-        AppCompatDelegate.setDefaultNightMode(
-                AppCompatDelegate.MODE_NIGHT_YES);
-
         mCompositionRoot = new CompositionRoot(this);
+
+        if (mCompositionRoot.getRepository().isFollowSystemSetting()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(mCompositionRoot.getRepository().isDarkMode() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
         if (mCompositionRoot.getRepository().isFirstLaunched()) {
            createFirstLaunchData();

@@ -20,6 +20,9 @@
     <color name="detailsBtcTextColor">#FFF</color>
     <color name="infoTextColor">#C1C1C1</color>
 
+    <color name="calculatorBackgroundTop">@color/grey_95</color>
+    <color name="calculatorBackgroundTopInput">@color/grey_85</color>
+
     <!-- Basic colors -->
     <color name="white">#FFFFFFFF</color>
     <color name="blue_light">#FF29ABE2</color>

@@ -7,6 +7,9 @@ import com.dummycoding.mycrypto.di.CompositionRoot;
 
 public class BaseFragment extends Fragment {
     public CompositionRoot getCompositionRoot() {
-        return ((MyCrypto)getActivity().getApplication()).getCompositionRoot();
+        if (getActivity() != null) {
+            return ((MyCrypto)getActivity().getApplication()).getCompositionRoot();
+        }
+        return null;
     }
 }

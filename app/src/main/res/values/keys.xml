@@ -10,4 +10,6 @@
     <string name="show_only_favorite_pairs_key">show_only_favorite_pairs_key</string>
     <string name="list_favorites_key">list_favorites_key</string>
     <string name="hide_double_click_key">hide_double_click_key</string>
+    <string name="dark_mode_key">dark_mode_key</string>
+    <string name="follow_system_setting_key">follow_system_setting_key</string>
 </resources>

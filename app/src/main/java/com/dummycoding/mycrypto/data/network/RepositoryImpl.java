@@ -50,6 +50,16 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public boolean isDarkMode() {
+        return mPreferences.getBoolean(mContext.getString(R.string.dark_mode_key), true);
+    }
+
+    @Override
+    public boolean isFollowSystemSetting() {
+        return mPreferences.getBoolean(mContext.getString(R.string.follow_system_setting_key), false);
+    }
+
+    @Override
     public void setHideDoubleClickHint() {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putBoolean(mContext.getString(R.string.hide_double_click_key), true);

@@ -15,4 +15,7 @@
 
     <color name="topBar">#FFCC80</color>
     <color name="toolbar_background">#272727</color>
+
+    <color name="calculatorBackgroundTop">@color/grey_20</color>
+    <color name="calculatorBackgroundTopInput">@color/grey_30</color>
 </resources>

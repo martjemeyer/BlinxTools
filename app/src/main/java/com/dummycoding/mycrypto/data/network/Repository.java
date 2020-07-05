@@ -21,6 +21,10 @@ public interface Repository {
 
     boolean isFirstLaunched();
 
+    boolean isFollowSystemSetting();
+
+    boolean isDarkMode();
+
     String getPreferredCurrency();
 
     float getBtcValueForPreferredCurrency();

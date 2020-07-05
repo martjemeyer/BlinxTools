@@ -8,9 +8,17 @@
             app:summary="EUR" />
 
         <SwitchPreferenceCompat
+            app:key="@string/follow_system_setting_key"
+            app:disableDependentsState="true"
+            app:title="Follow system theme"
+            app:defaultValue="false"
+            app:summary="The app will use the theme set by the system" />
+
+        <SwitchPreferenceCompat
             app:key="@string/dark_mode_key"
+            app:dependency="@string/follow_system_setting_key"
             app:title="Enable dark mode"
-            app:defaultValue="false"/>
+            app:defaultValue="true"/>
 
     </PreferenceCategory>
 

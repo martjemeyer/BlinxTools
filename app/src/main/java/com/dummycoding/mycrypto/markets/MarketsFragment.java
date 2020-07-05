@@ -157,6 +157,8 @@ public class MarketsFragment extends BaseFragment implements BitBlinxMainAdapter
     }
 
     private void updateOwnedTokensAdapter(List<OwnedToken> ownedTokens) {
+        if (getCompositionRoot() == null) return;
+
         double btcInCurrency = getCompositionRoot().getRepository().getBtcValueForPreferredCurrency();
         String preferredCurrency = getCompositionRoot().getRepository().getPreferredCurrency();
         mOwnedTokensAdapter.updateAdapter(ownedTokens, btcInCurrency, preferredCurrency);
@@ -169,6 +171,7 @@ public class MarketsFragment extends BaseFragment implements BitBlinxMainAdapter
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
+                    if (getCompositionRoot() == null) return;
                     String preferredCurrency = getCompositionRoot().getRepository().getPreferredCurrency();
                     double btcValue = getCompositionRoot().getRepository().getBtcValueForPreferredCurrency();
                     if (btcValue > 0) {
@@ -212,23 +215,34 @@ public class MarketsFragment extends BaseFragment implements BitBlinxMainAdapter
 
     @SuppressLint("CheckResult")
     private void updateFiatCurrencies() {
+        if (getCompositionRoot() == null) return;
+
         mFetchAvailableCurrenciesUseCase.getCurrencies()
                 .subscribeOn(Schedulers.io())
-                .subscribe(result -> getCompositionRoot().getRepository().storeCoinDeskCurrencies(result)
-                        .subscribe(), throwable -> Timber.e(throwable, "buttonPressed: "));
+                .subscribe(result ->
+                {
+                    if (getCompositionRoot() == null) return;
+                    getCompositionRoot().getRepository().storeCoinDeskCurrencies(result)
+                            .subscribe();
+                }, throwable -> Timber.e(throwable, "buttonPressed: "));
     }
 
     @SuppressLint("CheckResult")
     private void getLatestData() {
+        if (getCompositionRoot() == null) return;
+
         Single.zip(getActiveCurrencies(), getActiveTokenPairs(), CombinedResultWrapper::new)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(wrapper -> showProgressBar(true))
                 .doFinally(() -> {
                     mSwipeRefreshLayout.setRefreshing(false);
+                    if (getCompositionRoot() == null) return;
                     showProgressBar(false);
                 })
                 .subscribe(resultWrapper -> {
+                    if (getCompositionRoot() == null) return;
+
                     getCompositionRoot().getRepository().setBtcValueForPreferredCurrency(resultWrapper.getBpi().getRateFloat());
                     getCompositionRoot().getRepository().storeLatestBitBlinxData(resultWrapper.getResult())
                             .subscribeOn(Schedulers.io())
