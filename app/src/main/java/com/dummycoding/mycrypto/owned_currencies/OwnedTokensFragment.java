@@ -256,6 +256,15 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
                         getCompositionRoot().getRepository().storeOwnedToken(ownedToken)
                                 .subscribe(() -> {
                                 }, throwable -> Timber.e(throwable, "updateOwnedTokensRates: "));
+                    } else if (ownedToken.getToken().equals("GTFTA-MA")) {
+                        int indexGtfta = results.indexOf(new Result("GTFTA/BTC"));
+                        if (indexGtfta == -1) {
+                            return ownedToken;
+                        }
+                        ownedToken.setTokenInBtc(Double.parseDouble(results.get(indexGtfta).getLast()) * 50);
+                        getCompositionRoot().getRepository().storeOwnedToken(ownedToken)
+                                .subscribe(() -> {
+                                }, throwable -> Timber.e(throwable, "updateOwnedTokensRates: "));
                     }
                     return ownedToken;
                 })
