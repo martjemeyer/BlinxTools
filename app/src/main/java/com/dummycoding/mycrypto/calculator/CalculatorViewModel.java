@@ -200,7 +200,7 @@ public class CalculatorViewModel extends BaseViewModel {
             return;
         }
         if (topSelectedIndex == 0) {
-            String output = CurrencyHelper.removeTrailingZeros(Double.toString(btc * amount));
+            String output = CurrencyHelper.removeTrailingZeros(CurrencyHelper.roundBtc(btc * amount));
             topStream.onNext(output);
         }
 
@@ -210,7 +210,7 @@ public class CalculatorViewModel extends BaseViewModel {
         double btcValue = parseDouble(token.getLast());
         if (btcValue != 0) {
             double result = (btc * amount) / btcValue;
-            String output = CurrencyHelper.removeTrailingZeros(CurrencyHelper.round(result));
+            String output = CurrencyHelper.removeTrailingZeros(CurrencyHelper.roundBtc(result));
             topStream.onNext(output);
         }
     }
@@ -221,7 +221,7 @@ public class CalculatorViewModel extends BaseViewModel {
         }
         if (middleSelectedIndex == 0) {
 
-            String output = CurrencyHelper.removeTrailingZeros(Double.toString(btc * amount));
+            String output = CurrencyHelper.removeTrailingZeros(CurrencyHelper.roundBtc(btc * amount));
             middleStream.onNext(output);
         }
 
@@ -231,7 +231,7 @@ public class CalculatorViewModel extends BaseViewModel {
         double btcValue = parseDouble(token.getLast());
         if (btcValue != 0) {
             double result = (btc * amount) / btcValue;
-            String output = CurrencyHelper.removeTrailingZeros(CurrencyHelper.round(result));
+            String output = CurrencyHelper.removeTrailingZeros(CurrencyHelper.roundBtc(result));
             middleStream.onNext(output);
         }
     }
@@ -243,7 +243,7 @@ public class CalculatorViewModel extends BaseViewModel {
         double bpiValue = getCompositionRoot().getRepository().getBtcValueForPreferredCurrency();
         if (bpiValue == 0) {return;}
         double result = btc * amount * bpiValue;
-        String output = CurrencyHelper.removeTrailingZeros(CurrencyHelper.round(result));
+        String output = CurrencyHelper.removeTrailingZeros(CurrencyHelper.roundBpi(result, true));
         bottomStream.onNext(output);
     }
 

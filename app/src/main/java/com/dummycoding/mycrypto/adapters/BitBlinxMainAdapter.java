@@ -152,7 +152,7 @@ public class BitBlinxMainAdapter extends RecyclerView.Adapter<BitBlinxMainAdapte
                 String preferredCurrency = mSharedPreferences.getString(mContext.getString(R.string.preferred_currency_key), "EUR");
 
                 float valueInCurrency = Float.parseFloat(result.getLast()) * btcValuePreferredCurrency;
-                String valueInCurrencyString = CurrencyHelper.round(valueInCurrency);
+                String valueInCurrencyString = CurrencyHelper.roundBpi(valueInCurrency, true);
 
                 lastPriceDetailsCurrency.setText(valueInCurrencyString + " " + preferredCurrency);
                 lastPriceDetailsCurrency.setVisibility(View.VISIBLE);

@@ -104,19 +104,14 @@ public class OwnedTokensFragmentAdapter extends RecyclerView.Adapter<OwnedTokens
 
         void setDetails(OwnedToken ownedToken) {
             NumberFormat nf = new DecimalFormat("##.###");
-            String some = String.format(mContext.getString(R.string.chosen_currency),
-                    nf.format(ownedToken.getTokenAmount()), ownedToken.getToken());
-
             double totalTokenInBFiat = ownedToken.getToken().equals("BTC") ? ownedToken.getTokenAmount() * mBtcInCurrency : ownedToken.getTokenAmount() * ownedToken.getTokenInBtc() * mBtcInCurrency;
-            String someOther = String.format(mContext.getString(R.string.chosen_currency_value),
-                    CurrencyHelper.round(totalTokenInBFiat), mPreferredCurrency);
 
             binding.pair.setText(ownedToken.getToken());
             binding.amountDetail.setText(nf.format(ownedToken.getTokenAmount()));
             binding.priceInCurrency.setText(String.format(mContext.getString(R.string.total_value_in), mPreferredCurrency));
-            binding.priceInCurrencyDetail.setText(CurrencyHelper.round(totalTokenInBFiat));
+            binding.priceInCurrencyDetail.setText(CurrencyHelper.roundBpi(totalTokenInBFiat, false));
             binding.priceInBtc.setText(String.format(mContext.getString(R.string.total_value_in), "BTC"));
-            binding.priceInBtcDetail.setText(CurrencyHelper.round(ownedToken.getTokenInBtc() * ownedToken.getTokenAmount()));
+            binding.priceInBtcDetail.setText(CurrencyHelper.roundBtc(ownedToken.getTokenInBtc() * ownedToken.getTokenAmount()));
             /*
             NumberFormat nf = new DecimalFormat("##.###");
             token.setText(String.format(mContext.getString(R.string.chosen_currency),

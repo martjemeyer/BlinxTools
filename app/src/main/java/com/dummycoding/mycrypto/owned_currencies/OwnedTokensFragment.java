@@ -22,6 +22,7 @@ import com.dummycoding.mycrypto.adapters.OwnedTokensAdapterCallback;
 import com.dummycoding.mycrypto.adapters.OwnedTokensFragmentAdapter;
 import com.dummycoding.mycrypto.common.BaseFragment;
 import com.dummycoding.mycrypto.databinding.FragmentOwnedTokensBinding;
+import com.dummycoding.mycrypto.helpers.CurrencyHelper;
 import com.dummycoding.mycrypto.models.CombinedResultWrapper;
 import com.dummycoding.mycrypto.models.OwnedToken;
 import com.dummycoding.mycrypto.models.bitblinx.ActiveCurrencies;
@@ -194,10 +195,31 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
     private void subscribe() {
         disposeBag.add(mViewModel.subscribeToOwnedTokenDbChanges()
                 .subscribe(result -> {
+                            double prefCurrencyValue = getCompositionRoot().getRepository().getBtcValueForPreferredCurrency();
+                            String prefCurrency = getCompositionRoot().getRepository().getPreferredCurrency();
+
                             mOwnedTokensAdapter.updateAdapter(
                                     result,
-                                    getCompositionRoot().getRepository().getBtcValueForPreferredCurrency(),
-                                    getCompositionRoot().getRepository().getPreferredCurrency()
+                                    prefCurrencyValue,
+                                    prefCurrency
+                            );
+
+                            double totalCurrency = 0;
+                            double totalBtc = 0;
+
+                            for (OwnedToken token: result) {
+                                totalBtc += token.getTokenAmount() * token.getTokenInBtc();
+
+                                boolean isBtc = token.getToken().equals("BTC");
+
+                                totalCurrency += isBtc
+                                        ? token.getTokenAmount() * prefCurrencyValue
+                                        : token.getTokenAmount() * token.getTokenInBtc() * prefCurrencyValue;
+                            }
+                            binding.totalTokens.setText(
+                                    String.format("Total: %s %s / %s BTC",
+                                    CurrencyHelper.removeTrailingZeros(CurrencyHelper.roundBpi(totalCurrency, false)),
+                                    prefCurrency, CurrencyHelper.removeTrailingZeros(CurrencyHelper.roundBtc(totalBtc)))
                             );
                         },
                         throwable -> {
@@ -220,6 +242,60 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
     }
 
     private void getLatestData() {
+        if (getCompositionRoot().getRepository().getUseCoinDesk() || !getCompositionRoot().getRepository().getPreferredCurrency().equals("EUR")) {
+            getLatestDataWithCoinDesk();
+        } else {
+            getLatestDateWithBitBlinxOnly();
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    private void getLatestDateWithBitBlinxOnly() {
+        if (getCompositionRoot() == null) return;
+
+        getActiveTokenPairs()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(wrapper -> showProgressBar(true))
+                .doFinally(() -> {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    if (getCompositionRoot() == null) return;
+                    showProgressBar(false);
+                })
+                .subscribe(result -> {
+                    if (getCompositionRoot() == null) return;
+
+                    int index = result.indexOf(new Result("BTC/EUR"));
+                    if (index == -1) {
+                        getLatestDataWithCoinDesk();
+                        return;
+                    }
+
+                    Result btcEurPair = result.get(index);
+
+                    float floatValue;
+
+                    try {
+                        floatValue = Float.parseFloat(btcEurPair.getLast());
+                    }
+                    catch (Exception e) {
+                        getLatestDataWithCoinDesk();
+                        return;
+                    }
+
+                    getCompositionRoot().getRepository().setBtcValueForPreferredCurrency(floatValue);
+
+                    getCompositionRoot().getRepository().storeLatestBitBlinxData(result)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(() -> {
+                            }, throwable -> Timber.e(throwable, "getLatestData: "));
+                    if (getCompositionRoot().getRepository().getShowOwnedTokens()) {
+                        updateOwnedTokensRates(result, floatValue);
+                    }
+                }, throwable -> Timber.e(throwable, "getLatestData: "));
+    }
+
+    private void getLatestDataWithCoinDesk() {
         Single.zip(getActiveCurrencies(), getActiveTokenPairs(), CombinedResultWrapper::new)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -235,14 +311,14 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
                             .subscribe(() -> {
                             }, throwable -> Timber.e(throwable, "getLatestData: "));
                     if (getCompositionRoot().getRepository().getShowOwnedTokens()) {
-                        updateOwnedTokensRates(resultWrapper);
+                        updateOwnedTokensRates(resultWrapper.getResult(), resultWrapper.getBpi().getRateFloat());
                     }
                 }, throwable -> Timber.e(throwable, "getLatestData: "));
     }
 
-    private void updateOwnedTokensRates(CombinedResultWrapper resultWrapper) {
-        mOwnedTokensAdapter.refreshWithUpdatedBtcCurrency(resultWrapper.getBpi().getRateFloat());
-        List<Result> results = resultWrapper.getResult();
+    @SuppressLint("CheckResult")
+    private void updateOwnedTokensRates(List<Result> results, float btcRate) {
+        mOwnedTokensAdapter.refreshWithUpdatedBtcCurrency(btcRate);
 
         getCompositionRoot().getRepository().getOwnedTokensSingle()
                 .subscribeOn(Schedulers.io())

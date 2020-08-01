@@ -45,6 +45,18 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public void setDisclaimerShown() {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(mContext.getString(R.string.disclaimer_shown_key), true);
+        editor.apply();
+    }
+
+    @Override
+    public boolean isDisclaimerShown() {
+        return mPreferences.getBoolean(mContext.getString(R.string.disclaimer_shown_key), false);
+    }
+
+    @Override
     public boolean isFirstLaunched() {
         return mPreferences.getBoolean(mContext.getString(R.string.fist_launch_key), true);
     }
@@ -96,6 +108,18 @@ public class RepositoryImpl implements Repository {
     @Override
     public boolean getShowOwnedTokens() {
         return mPreferences.getBoolean(mContext.getString(R.string.owned_currency_key), true);
+    }
+
+    @Override
+    public void setUseCoinDesk(boolean value) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(mContext.getString(R.string.use_coin_desk_key), value);
+        editor.apply();
+    }
+
+    @Override
+    public boolean getUseCoinDesk() {
+        return mPreferences.getBoolean(mContext.getString(R.string.use_coin_desk_key), false);
     }
 
     @Override

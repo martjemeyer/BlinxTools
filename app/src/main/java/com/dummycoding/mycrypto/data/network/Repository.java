@@ -15,6 +15,10 @@ public interface Repository {
     // Shared preferences
     void setFirstLaunched();
 
+    void setDisclaimerShown();
+
+    boolean isDisclaimerShown();
+
     void setHideDoubleClickHint();
 
     boolean isDoubleClickHintHidden();
@@ -34,6 +38,10 @@ public interface Repository {
     boolean getOnlyFavoritesResults();
 
     boolean getShowOwnedTokens();
+
+
+    void setUseCoinDesk(boolean value);
+    boolean getUseCoinDesk();
 
     List<String> getFavorites();
 

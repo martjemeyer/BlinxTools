@@ -8,6 +8,13 @@
             app:summary="EUR" />
 
         <SwitchPreferenceCompat
+            app:key="@string/use_coin_desk_key"
+            app:disableDependentsState="true"
+            app:title="Use CoinDesk for BTC/EUR conversion"
+            app:defaultValue="false"
+            app:summary="Use CoinDesk when you use an external exchange to buy/sell BTC" />
+
+        <SwitchPreferenceCompat
             app:key="@string/follow_system_setting_key"
             app:disableDependentsState="true"
             app:title="Follow system theme"

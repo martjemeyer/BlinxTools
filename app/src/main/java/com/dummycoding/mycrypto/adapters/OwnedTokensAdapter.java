@@ -77,9 +77,14 @@ public class OwnedTokensAdapter extends RecyclerView.Adapter<OwnedTokensAdapter.
             token.setText(String.format(mContext.getString(R.string.chosen_currency),
                     nf.format(ownedToken.getTokenAmount()), ownedToken.getToken()));
 
-            double totalTokenInBFiat = ownedToken.getToken().equals("BTC") ? ownedToken.getTokenAmount() * mBtcInCurrency : ownedToken.getTokenAmount() * ownedToken.getTokenInBtc() * mBtcInCurrency;
-            tokenValue.setText(String.format(mContext.getString(R.string.chosen_currency_value),
-                    CurrencyHelper.round(totalTokenInBFiat), mPreferredCurrency));
+            boolean isBtc = ownedToken.getToken().equals("BTC");
+
+            double totalTokenInBFiat = isBtc
+                    ? ownedToken.getTokenAmount() * mBtcInCurrency
+                    : ownedToken.getTokenAmount() * ownedToken.getTokenInBtc() * mBtcInCurrency;
+            tokenValue.setText(String.format(mContext.getString(R.string.chosen_currency_value), (isBtc
+                    ? CurrencyHelper.roundBtc(totalTokenInBFiat)
+                    : CurrencyHelper.roundBpi(totalTokenInBFiat, false)), mPreferredCurrency));
         }
     }
 }
