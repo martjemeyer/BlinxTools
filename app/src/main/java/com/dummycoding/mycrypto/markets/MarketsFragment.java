@@ -202,7 +202,7 @@ public class MarketsFragment extends BaseFragment implements BitBlinxMainAdapter
                                         : token.getTokenAmount() * token.getTokenInBtc() * prefCurrencyValue;
                             }
                             binding.ownedCurrenciesTv.setText(
-                                    String.format("PortFolio (%s %s)",
+                                    String.format("PortFolio    %s %s",
                                             CurrencyHelper.removeTrailingZeros(CurrencyHelper.roundBpi(totalCurrency, false)),
                                             prefCurrency)
                             );
