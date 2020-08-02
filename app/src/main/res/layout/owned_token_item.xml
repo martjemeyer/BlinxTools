@@ -11,7 +11,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="chosenToken, dummySpacer" />
+
+    <View
+        android:id="@+id/dummySpacer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline" />
 
     <TextView
         android:id="@+id/chosenToken"
@@ -30,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/primary"
-        app:layout_constraintStart_toEndOf="@+id/chosenToken"
+        app:layout_constraintStart_toEndOf="@+id/barrier"
         app:layout_constraintTop_toTopOf="@+id/chosenToken"
         style="@style/OwnedToken"
         android:textStyle="bold"
@@ -40,8 +54,9 @@
         android:id="@+id/chosenTokenValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/chosenTokenEqualsSign"
+        app:layout_constraintStart_toEndOf="@+id/barrier"
         app:layout_constraintTop_toTopOf="@+id/chosenToken"
+        android:layout_marginStart="24dp"
         android:text="@string/chosen_currency_value"
         style="@style/OwnedToken"
         tools:text="50 EUR" />

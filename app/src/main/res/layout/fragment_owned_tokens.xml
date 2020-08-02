@@ -7,12 +7,16 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/totalTokens"
+        style="@style/OwnedCurrencies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="1234 BTC 454311 EUR"
-        android:layout_margin="16dp" />
+        tools:text="1200 EUR / 0.25 BTC"
+        android:textColor="@color/primary"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+         />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"

@@ -24,7 +24,7 @@ public class CurrencyHelper {
     public static String roundBtc(double number) {
         BigDecimal bd = new BigDecimal(Double.toString(number));
         int places = 6;
-        if (number < 1) {
+        if (number < 0.0001) {
             char[] numberArray = Double.toString(number).toCharArray();
             for (int i = 2; i < numberArray.length - 1; i++) {
                 if (numberArray[i] != '0') {
