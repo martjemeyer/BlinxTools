@@ -47,6 +47,9 @@ public interface Repository {
 
     void setFavorites(List<String> favorites);
 
+    void setBtcFixPassed();
+    boolean btcFixPassed();
+
     // DB
     Completable storeLatestBitBlinxData(List<Result> bitBlinxResult);
 
@@ -71,6 +74,8 @@ public interface Repository {
     Flowable<List<OwnedToken>> getOwnedTokensFlowable();
 
     Single<List<OwnedToken>> getOwnedTokensSingle();
+
+    Single<List<OwnedToken>> getBtcOwnedTokensSingle();
 
     Flowable<List<Currency>> getCoinDeskCurrenciesFlowable();
 

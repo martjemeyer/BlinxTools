@@ -31,6 +31,9 @@ public interface OwnedTokenDao {
     @Query("SELECT * FROM OwnedToken ORDER BY orderedIndex")
     Single<List<OwnedToken>> getAllOwnedTokensSingle();
 
+    @Query("SELECT * FROM OwnedToken WHERE token = 'BTC'")
+    Single<List<OwnedToken>> getBtcOwnedTokens();
+
     @Query("UPDATE OwnedToken SET orderedIndex=:price WHERE id = :id")
     Completable update(int id, int price);
 

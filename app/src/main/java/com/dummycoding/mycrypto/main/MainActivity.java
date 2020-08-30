@@ -11,11 +11,16 @@ import androidx.annotation.NonNull;
 import com.crowdfire.cfalertdialog.CFAlertDialog;
 import com.dummycoding.mycrypto.R;
 import com.dummycoding.mycrypto.common.BaseActivity;
+import com.dummycoding.mycrypto.data.network.Repository;
 import com.dummycoding.mycrypto.databinding.ActivityMainBinding;
+import com.dummycoding.mycrypto.models.OwnedToken;
 import com.dummycoding.mycrypto.preferences.SettingsActivity;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.Objects;
+
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity {
 
@@ -46,6 +51,29 @@ public class MainActivity extends BaseActivity {
             getCompositionRoot().getRepository().setDisclaimerShown();
             showDisclaimer();
         }
+
+        Repository repo = getCompositionRoot().getRepository();
+        if (!repo.btcFixPassed()){
+            btxFix(repo);
+        }
+    }
+
+    private void btxFix(Repository repo) {
+        repo.getBtcOwnedTokensSingle()
+                .subscribeOn(Schedulers.io())
+                .subscribe(tokens -> {
+
+                    for (OwnedToken token: tokens) {
+                        token.setTokenInBtc(1);
+                    }
+                    if (tokens.size() != 0) {
+                        repo.insertOwnedTokens(tokens)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(() -> {
+                                }, throwable -> Timber.e(throwable, "btxFix: "));
+                    }
+                    repo.setBtcFixPassed();
+                }, throwable -> Timber.e(throwable, "editOwnedToken: "));
     }
 
     private void showDisclaimer() {

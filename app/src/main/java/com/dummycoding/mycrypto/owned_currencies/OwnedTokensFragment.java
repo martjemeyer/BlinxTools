@@ -141,7 +141,7 @@ public class OwnedTokensFragment extends BaseFragment implements OwnedTokensAdap
     private void editOwnedToken(OwnedToken ownedToken) {
 
         if (ownedToken.getToken().equals("BTC")) {
-            ownedToken.setTokenInBtc(getCompositionRoot().getRepository().getBtcValueForPreferredCurrency());
+            ownedToken.setTokenInBtc(1);
             getCompositionRoot().getRepository().storeOwnedToken(ownedToken)
                     .subscribeOn(Schedulers.io())
                     .subscribe(() -> {

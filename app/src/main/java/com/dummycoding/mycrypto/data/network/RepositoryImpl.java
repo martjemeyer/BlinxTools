@@ -138,6 +138,18 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public void setBtcFixPassed() {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(mContext.getString(R.string.btc_fix_passed_key), true);
+        editor.apply();
+    }
+
+    @Override
+    public boolean btcFixPassed() {
+        return mPreferences.getBoolean(mContext.getString(R.string.btc_fix_passed_key), false);
+    }
+
+    @Override
     public Completable storeLatestBitBlinxData(List<Result> bitBlinxResult) {
         return mDatabase.blinxResultDao().insertResults(bitBlinxResult);
     }
@@ -180,6 +192,11 @@ public class RepositoryImpl implements Repository {
     @Override
     public Single<List<OwnedToken>> getOwnedTokensSingle() {
         return mDatabase.ownedTokenDao().getAllOwnedTokensSingle();
+    }
+
+    @Override
+    public Single<List<OwnedToken>> getBtcOwnedTokensSingle() {
+        return mDatabase.ownedTokenDao().getBtcOwnedTokens();
     }
 
     @Override

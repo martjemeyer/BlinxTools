@@ -14,4 +14,5 @@
     <string name="dark_mode_key">dark_mode_key</string>
     <string name="follow_system_setting_key">follow_system_setting_key</string>
     <string name="use_coin_desk_key">use_coin_desk_key</string>
+    <string name="btc_fix_passed_key">btc_fix_passed_key</string>
 </resources>
