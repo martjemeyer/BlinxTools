@@ -96,6 +96,10 @@ public class CalculatorActivity extends BaseActivity {
         mDisposeBag.clear();
     }
 
+    public void showTokenPair(boolean show) {
+        mBinding.pairConversionOutput.setVisibility(show ? View.VISIBLE : View.GONE);
+        mBinding.pairCombination.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -185,6 +189,24 @@ public class CalculatorActivity extends BaseActivity {
                 .subscribe(result -> {
                     mBinding.progress.setVisibility(result ? View.VISIBLE : View.INVISIBLE);
                 }, throwable -> Timber.e(throwable.toString(), "subscribeToOutputStream: "))
+        );
+
+        mDisposeBag.add(
+                mViewModel.getDirectPairIdentifierStream()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> {
+                            mBinding.pairConversionOutput.setVisibility(!result.equals("") ? View.VISIBLE : View.GONE);
+                            mBinding.pairCombination.setVisibility(!result.equals("") ? View.VISIBLE : View.GONE);
+                            mBinding.pairCombination.setText(result);
+                        }, throwable -> Timber.e(throwable.toString(), "subscribeToOutputStream: "))
+        );
+
+        mDisposeBag.add(
+                mViewModel.getDirectPairOutputStream()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> {
+                            mBinding.pairConversionOutput.setText(result);
+                        }, throwable -> Timber.e(throwable.toString(), "subscribeToOutputStream: "))
         );
     }
 

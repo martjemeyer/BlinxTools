@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.45" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top"
@@ -35,6 +35,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
+        <TextView
+            android:id="@+id/pairConversionOutput"
+            style="@style/Pair"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:ellipsize="end"
+            android:enabled="false"
+            android:maxLines="1"
+            android:text="0"
+            android:textColor="@color/onSurface"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/topInput"
+            app:layout_constraintEnd_toEndOf="@+id/topInput"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1.1234567" />
+
+        <TextView
+            android:id="@+id/pairCombination"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:maxLines="1"
+            android:text="GTFTA/GTPLUS"
+            android:textColor="@color/onSurface"
+            android:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toBottomOf="@+id/pairConversionOutput"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pairConversionOutput"
+            app:layout_constraintTop_toTopOf="@+id/pairConversionOutput" />
+
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/topInput"
             style="@style/Pair"
@@ -43,33 +78,56 @@
             android:layout_marginLeft="16dp"
             android:background="@drawable/soft_corners"
             android:backgroundTint="@color/calculatorBackgroundTopInput"
+            android:ellipsize="end"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
             android:padding="8dp"
-            tools:text="1.1234567"
             android:text="0"
             android:textColor="@color/onSurface"
             android:textIsSelectable="true"
-            android:inputType="numberDecimal"
-            android:maxLines="1"
-            android:ellipsize="end"
             app:layout_constraintBottom_toTopOf="@+id/middleInput"
             app:layout_constraintEnd_toStartOf="@+id/topDropDown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pairConversionOutput"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="1.1234567" />
+
+        <ImageView
+            android:id="@+id/btcImageView1"
+            android:layout_width="24dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@+id/btc1"
+            app:layout_constraintBottom_toBottomOf="@+id/btc1"
+            app:layout_constraintEnd_toStartOf="@+id/btc1"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            android:src="@drawable/exchange_arrows_black"
+            android:tint="@color/onSurface" />
+
+        <TextView
+            android:id="@+id/btc1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BTC"
+            app:layout_constraintBottom_toTopOf="@+id/middleInput"
+            app:layout_constraintEnd_toEndOf="@+id/topInput"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btcImageView1"
+            app:layout_constraintTop_toBottomOf="@+id/topInput"
+            android:textColor="@color/onSurface" />
 
         <Spinner
             android:id="@+id/topDropDown"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/onSurface"
+            app:layout_constraintBottom_toBottomOf="@+id/topInput"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/topInput"
-            app:layout_constraintTop_toTopOf="@+id/topInput"
-            app:layout_constraintBottom_toBottomOf="@+id/topInput"
-            android:layout_marginStart="16dp"
-            android:textColor="@color/onSurface" />
+            app:layout_constraintTop_toTopOf="@+id/topInput" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/middleInput"
@@ -80,31 +138,56 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/soft_corners"
             android:backgroundTint="@color/calculatorBackgroundTopInput"
-            android:padding="8dp"
-            tools:text="1.1234567"
-            android:text="0"
-            android:textIsSelectable="true"
-            android:textColor="@color/onSurface"
+            android:ellipsize="end"
             android:inputType="numberDecimal"
             android:maxLines="1"
-            android:ellipsize="end"
+            android:padding="8dp"
+            android:text="0"
+            android:textColor="@color/onSurface"
+            android:textIsSelectable="true"
             app:layout_constraintBottom_toTopOf="@id/bottomInput"
             app:layout_constraintEnd_toStartOf="@+id/middleDropDown"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topInput" />
+            app:layout_constraintTop_toBottomOf="@+id/topInput"
+            tools:text="1.1234567" />
 
         <Spinner
             android:id="@+id/middleDropDown"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/onSurface"
+            app:layout_constraintBottom_toBottomOf="@+id/middleInput"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/middleInput"
-            app:layout_constraintTop_toTopOf="@+id/middleInput"
-            app:layout_constraintBottom_toBottomOf="@+id/middleInput"
-            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@+id/middleInput" />
+
+        <ImageView
+            android:id="@+id/btcImageView2"
+            android:layout_width="24dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@+id/btc2"
+            app:layout_constraintBottom_toBottomOf="@+id/btc2"
+            app:layout_constraintEnd_toStartOf="@+id/btc2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/exchange_arrows_black"
+            android:tint="@color/onSurface" />
+
+        <TextView
+            android:id="@+id/btc2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BTC"
+            app:layout_constraintBottom_toTopOf="@+id/bottomInput"
+            app:layout_constraintEnd_toEndOf="@+id/topInput"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btcImageView2"
+            app:layout_constraintTop_toBottomOf="@+id/middleInput"
             android:textColor="@color/onSurface" />
 
         <com.google.android.material.textfield.TextInputEditText
@@ -116,21 +199,21 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/soft_corners"
             android:backgroundTint="@color/calculatorBackgroundTopInput"
-            android:padding="8dp"
-            tools:text="1.1234567"
-            android:text="0"
-            android:textIsSelectable="true"
-            android:textColor="@color/onSurface"
-            android:inputType="numberDecimal"
-            android:maxLines="1"
-            android:lines="1"
             android:ellipsize="end"
+            android:inputType="numberDecimal"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="8dp"
+            android:text="0"
+            android:textColor="@color/onSurface"
+            android:textIsSelectable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/bottomInputDetail"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/middleInput" />
+            app:layout_constraintTop_toBottomOf="@+id/middleInput"
+            tools:text="1.1234567" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/bottomInputDetail"

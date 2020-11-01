@@ -29,6 +29,9 @@ import timber.log.Timber;
 
 public class CalculatorViewModel extends BaseViewModel {
 
+    private Result gtftaGtplusPair;
+    private boolean inputBoxIsGtfta;
+
     enum SelectedInputBox {
         TOP,
         MIDDLE,
@@ -40,6 +43,8 @@ public class CalculatorViewModel extends BaseViewModel {
     private BehaviorSubject<String> middleStream = BehaviorSubject.createDefault("0");
     private BehaviorSubject<String> bottomStream = BehaviorSubject.createDefault("0");
     private BehaviorSubject<Boolean> progressStream = BehaviorSubject.createDefault(false);
+    private BehaviorSubject<String> directPairIdentifierStream = BehaviorSubject.createDefault("");
+    private BehaviorSubject<String> directPairOutputStream = BehaviorSubject.createDefault("0");
 
     private CompositeDisposable disposeBag = new CompositeDisposable();
 
@@ -50,15 +55,35 @@ public class CalculatorViewModel extends BaseViewModel {
     private String mActiveValue = "0";
     private int topSelectedIndex = -1;
     private int middleSelectedIndex = -1;
+    private boolean isTokenPair = false;
 
     void setTopSelectedIndex(int topSelectedIndex) {
         this.topSelectedIndex = topSelectedIndex;
+        checkForTokenPair();
         calculateOtherCurrencies(mActiveValue);
     }
 
     void setMiddleSelectedIndex(int middleSelectedIndex) {
         this.middleSelectedIndex = middleSelectedIndex;
+        checkForTokenPair();
         calculateOtherCurrencies(mActiveValue);
+    }
+
+    private void checkForTokenPair() {
+        String top = getTokenFromApdapter(topSelectedIndex);
+        String middle = getTokenFromApdapter(middleSelectedIndex);
+        if (top == null || middle == null) {
+            isTokenPair = false;
+        } else isTokenPair = top.equals("GTFTA") && middle.equals("GTPLUS")
+                || top.equals("GTPLUS") && middle.equals("GTFTA");
+
+        if (!isTokenPair) {
+            showTokenPair("");
+        }
+    }
+
+    private void showTokenPair(String value) {
+        directPairIdentifierStream.onNext(value);
     }
 
     public CalculatorViewModel(@NonNull Application application) {
@@ -91,7 +116,7 @@ public class CalculatorViewModel extends BaseViewModel {
     }
 
     private String getTokenFromApdapter(int index) {
-        if (adapterList.size() -1 >= topSelectedIndex) {
+        if (adapterList.size() -1 >= topSelectedIndex && index != -1) {
             return adapterList.get(index);
         }
         return null;
@@ -163,6 +188,65 @@ public class CalculatorViewModel extends BaseViewModel {
                 calculateAndUpdateMiddleBox(btcValueBottom, input);
                 break;
         }
+
+        if (isTokenPair) {
+            calculateAndUpdateTokenPair();
+        }
+    }
+
+    private void calculateAndUpdateTokenPair() {
+        Result topToken = getTopToken();
+        Result middleToken = getMiddleToken();
+
+        if (gtftaGtplusPair == null) {
+            updateGtftaGtplusPair();
+            return;
+        }
+
+        double ratio = parseDouble(gtftaGtplusPair.getLast());
+
+        if (topToken == null || middleToken == null)
+            return;
+
+        double activeValue = parseDouble(mActiveValue);
+
+        if (activeValue == 0 || ratio == 0) {
+            return;
+        }
+        double result = 0;
+        inputBoxIsGtfta = false;
+
+        switch (selectedInputBox) {
+            case TOP:
+                inputBoxIsGtfta = topToken.getSymbol().equals("GTFTA/BTC");
+                    result = inputBoxIsGtfta ? activeValue * ratio : activeValue / ratio;
+                    break;
+            case MIDDLE:
+                inputBoxIsGtfta = middleToken.getSymbol().equals("GTFTA/BTC");
+                result = inputBoxIsGtfta ? activeValue * ratio : activeValue / ratio;
+                break;
+            case BOTTOM:
+                showTokenPair("");
+                return;
+        }
+
+        directPairOutputStream.onNext(CurrencyHelper.roundBtc(result));
+
+        StringBuilder builder = new StringBuilder();
+        if (inputBoxIsGtfta) {
+            builder.append("GTPLUS");
+            builder.append(" (");
+            builder.append(ratio);
+            builder.append(" : 1");
+            builder.append(")");
+        } else {
+            builder.append("GTFTA");
+            builder.append(" (");
+            builder.append("1 : ");
+            builder.append(ratio);
+            builder.append(")");
+        }
+        showTokenPair(builder.toString());;
     }
 
     private double getBtcValue(SelectedInputBox inputBox, double amount) {
@@ -253,6 +337,7 @@ public class CalculatorViewModel extends BaseViewModel {
         middleStream.onNext("0");
         bottomStream.onNext("0");
         outputStream.onNext(new OutputModel("0", 1));
+        showTokenPair("");
     }
 
     Observable<OutputModel> getOutputStream() {
@@ -274,6 +359,15 @@ public class CalculatorViewModel extends BaseViewModel {
     Observable<Boolean> getProgressStream() {
         return progressStream.hide();
     }
+
+    Observable<String> getDirectPairIdentifierStream() {
+        return directPairIdentifierStream.hide();
+    }
+
+    Observable<String> getDirectPairOutputStream() {
+        return directPairOutputStream.hide();
+    }
+
 
     Single<List<String>> getBtcPairs() {
         return getCompositionRoot().getRepository().getAllBtcPairs()
@@ -312,6 +406,24 @@ public class CalculatorViewModel extends BaseViewModel {
                     }
 
                 }, throwable -> Timber.e(throwable, "updateLatestTokenValues, "))
+        );
+
+        if (isTokenPair) {
+            updateGtftaGtplusPair();
+        }
+    }
+
+    private void updateGtftaGtplusPair() {
+        disposeBag.add(
+                getCompositionRoot().getRepository().getTokenBySymbol("GTFTA/GTPLUS")
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(result -> {
+                            if (result.size() != 0) {
+                                gtftaGtplusPair = result.get(0);
+                                calculateOtherCurrencies(mActiveValue);
+                            }
+
+                        }, throwable -> Timber.e(throwable, "updateLatestTokenValues, "))
         );
     }
 
