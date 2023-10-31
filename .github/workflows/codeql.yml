@@ -19,7 +19,7 @@ on:
     branches: [ "master" ]
 
 env:
-  JAVA_VERSION: '17'
+  JAVA_VERSION: '8'
   VERSION_NUMBER: 1.0.0
   
 jobs:
@@ -47,7 +47,7 @@ jobs:
     - name: Setup of JDK
       uses: actions/setup-java@v3
       with:
-        java-version: 17
+        java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         cache: 'gradle'
 
