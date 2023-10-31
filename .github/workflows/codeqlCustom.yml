@@ -75,7 +75,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew assembleQa -Pversion="${{ env.VERSION_NUMBER }}"
+      run: ./gradlew assembleDebug -Pversion="${{ env.VERSION_NUMBER }}"
 
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
     # If this step fails, then you should remove it and run the build manually (see below)
