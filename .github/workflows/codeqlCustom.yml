@@ -20,6 +20,10 @@ on:
   schedule:
     - cron: '25 3 * * 1'
 
+env:
+  JAVA_VERSION: '8'
+  VERSION_NUMBER: 1.0.0
+
 jobs:
   analyze:
     name: Analyze
@@ -60,6 +64,18 @@ jobs:
         # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
 
+    - name: Setup of JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: ./gradlew assembleQa -Pversion="${{ env.VERSION_NUMBER }}"
 
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
     # If this step fails, then you should remove it and run the build manually (see below)
